@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mission Control — Your robot dog adventure starts here. First Contact: wake up your robot and make it yours.">
+  <meta name="description" content="Mission Control — Your robot dog adventure starts here. First Contact: wake up your robot, learn what Wi-Fi really is, and discover the STEM behind your new companion.">
   <title>Mission Control — First Contact</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
@@ -319,13 +319,323 @@
       <div class="wave-success" id="face-success">
         <p class="subtitle"><strong>You just changed how it looks!</strong><br>That face is now on your robot's screen. 🤖✨</p>
         <button class="btn btn-primary btn-pulse" id="btn-continue-faces">
-          Complete Mission <span class="btn-icon">🏁</span>
+          See How It Works <span class="btn-icon">🔬</span>
         </button>
       </div>
     </div>
   </section>
 
-  <!-- ==================== SCREEN 6: COMPLETION ==================== -->
+  <!-- ==================== SCREEN 6: MISSION DEBRIEF — LEARNING JOURNEY ==================== -->
+  <section id="screen-debrief" class="screen screen-scroll">
+    <div class="debrief-scroll" id="debrief-scroll">
+
+      <!-- ── Intro ── -->
+      <div class="debrief-hero">
+        <div class="label">Mission Debrief</div>
+        <h1 class="title">You did it.<br><span class="highlight">Now let's understand <em>how.</em></span></h1>
+        <p class="subtitle">You just commanded a robot. Let's peel back the curtain and see the incredible technology that made it possible.</p>
+        <div class="scroll-cue" aria-hidden="true">
+          <span class="scroll-cue-text">Scroll to explore</span>
+          <div class="scroll-cue-arrow"></div>
+        </div>
+      </div>
+
+      <!-- ── Section 1: What Just Happened ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-wide">
+          <div class="debrief-card-icon">🤔</div>
+          <h2 class="debrief-card-title">What just happened?</h2>
+          <p class="debrief-card-text">
+            When you clicked <strong>"Wave"</strong>, your browser sent a tiny message across your Wi-Fi network. That message traveled at the speed of light — <em>186,000 miles per second</em> — to your robot's brain, an ESP32 microchip no bigger than a postage stamp.
+          </p>
+          <div class="journey-flow">
+            <div class="journey-node journey-node-you" data-reveal-child>
+              <div class="journey-node-icon">👆</div>
+              <span>You clicked</span>
+            </div>
+            <div class="journey-arrow" data-reveal-child></div>
+            <div class="journey-node journey-node-wifi" data-reveal-child>
+              <div class="journey-node-icon">📶</div>
+              <span>Wi-Fi signal</span>
+            </div>
+            <div class="journey-arrow" data-reveal-child></div>
+            <div class="journey-node journey-node-brain" data-reveal-child>
+              <div class="journey-node-icon">🧠</div>
+              <span>Robot brain</span>
+            </div>
+            <div class="journey-arrow" data-reveal-child></div>
+            <div class="journey-node journey-node-move" data-reveal-child>
+              <div class="journey-node-icon">🐾</div>
+              <span>Leg moves!</span>
+            </div>
+          </div>
+          <p class="debrief-card-detail">
+            The robot's brain decoded your message and sent an electric pulse to a <strong>servo motor</strong> — a tiny motor that can rotate to an exact angle. That's how it raised its paw. One click, four miracles of engineering.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Section 2: Wi-Fi — Your Invisible Superpower ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-wide">
+          <div class="debrief-card-icon">📡</div>
+          <h2 class="debrief-card-title">Wi-Fi: Your invisible superpower</h2>
+          <p class="debrief-card-text">
+            Wi-Fi is just radio waves — the same kind of waves that carry music to your car radio. But instead of music, Wi-Fi carries <strong>data</strong>: text, images, commands.
+          </p>
+
+          <!-- Animated Wi-Fi visualization -->
+          <div class="wifi-viz" id="wifi-viz" aria-label="Animated visualization of Wi-Fi signal traveling from router to robot">
+            <div class="wifi-device wifi-router">
+              <div class="wifi-device-icon">🌐</div>
+              <span>Your Router</span>
+            </div>
+            <div class="wifi-waves-container">
+              <div class="wifi-wave wifi-wave-1"></div>
+              <div class="wifi-wave wifi-wave-2"></div>
+              <div class="wifi-wave wifi-wave-3"></div>
+              <div class="wifi-data-packet" id="wifi-packet">
+                <span>wave()</span>
+              </div>
+            </div>
+            <div class="wifi-device wifi-bot">
+              <div class="wifi-device-icon">🤖</div>
+              <span>Your Robot</span>
+            </div>
+          </div>
+
+          <div class="debrief-fact-row">
+            <div class="debrief-fact" data-reveal-child>
+              <div class="debrief-fact-num">2.4 GHz</div>
+              <div class="debrief-fact-label">Your robot's Wi-Fi frequency — it vibrates 2.4 <em>billion</em> times per second</div>
+            </div>
+            <div class="debrief-fact" data-reveal-child>
+              <div class="debrief-fact-num">~0 ms</div>
+              <div class="debrief-fact-label">How long it took your command to reach the robot (under 10 milliseconds)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Section 3: The Brain Inside ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-wide">
+          <div class="debrief-card-icon">🧠</div>
+          <h2 class="debrief-card-title">The brain inside your robot</h2>
+          <p class="debrief-card-text">
+            Your robot runs on an <strong>ESP32</strong> — a chip that costs about $3 yet has enough power to connect to Wi-Fi, read sensors, play sounds, and control four legs simultaneously.
+          </p>
+          <div class="chip-anatomy">
+            <div class="chip-visual">
+              <div class="chip-body">
+                <div class="chip-label">ESP32</div>
+                <div class="chip-pins chip-pins-left"></div>
+                <div class="chip-pins chip-pins-right"></div>
+                <div class="chip-pins chip-pins-top"></div>
+                <div class="chip-pins chip-pins-bottom"></div>
+                <div class="chip-core">
+                  <div class="chip-core-pulse"></div>
+                </div>
+              </div>
+            </div>
+            <div class="chip-features">
+              <div class="chip-feature" data-reveal-child>
+                <span class="chip-feature-icon">📶</span>
+                <div>
+                  <strong>Wi-Fi + Bluetooth</strong>
+                  <span>Talks to your phone and the internet</span>
+                </div>
+              </div>
+              <div class="chip-feature" data-reveal-child>
+                <span class="chip-feature-icon">⚡</span>
+                <div>
+                  <strong>160 MHz processor</strong>
+                  <span>Runs 160 million operations per second</span>
+                </div>
+              </div>
+              <div class="chip-feature" data-reveal-child>
+                <span class="chip-feature-icon">🎵</span>
+                <div>
+                  <strong>Speaker + Microphone</strong>
+                  <span>Can hear you and talk back</span>
+                </div>
+              </div>
+              <div class="chip-feature" data-reveal-child>
+                <span class="chip-feature-icon">🦿</span>
+                <div>
+                  <strong>4 Servo outputs</strong>
+                  <span>Controls each leg independently</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="debrief-card-callout">
+            💡 <strong>Fun fact:</strong> The first computer that guided Apollo astronauts to the Moon had <em>less</em> processing power than this $3 chip in your robot.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Section 4: STEM Is Everywhere ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-wide">
+          <div class="debrief-card-icon">🌍</div>
+          <h2 class="debrief-card-title">The same tech, everywhere</h2>
+          <p class="debrief-card-text">
+            The skills you're learning right now — sending commands over a network, controlling motors, writing logic — are the <strong>exact same skills</strong> behind some of humanity's greatest achievements.
+          </p>
+          <div class="stem-grid">
+            <div class="stem-card" data-reveal-child>
+              <div class="stem-card-emoji">🚀</div>
+              <h3>Mars Rovers</h3>
+              <p>NASA sends commands to Perseverance the same way you just controlled your robot — a message across a network. Theirs just travels 140&nbsp;million miles.</p>
+            </div>
+            <div class="stem-card" data-reveal-child>
+              <div class="stem-card-emoji">🏥</div>
+              <h3>Surgical Robots</h3>
+              <p>Da Vinci robots perform surgery using the same servo motors in your bot — just more precise and sterilized.</p>
+            </div>
+            <div class="stem-card" data-reveal-child>
+              <div class="stem-card-emoji">🚗</div>
+              <h3>Self-Driving Cars</h3>
+              <p>Every Tesla has an ESP-like chip reading sensors and making decisions — the same loop your robot uses to hear claps and react.</p>
+            </div>
+            <div class="stem-card" data-reveal-child>
+              <div class="stem-card-emoji">🛰️</div>
+              <h3>Satellites</h3>
+              <p>The International Space Station uses Wi-Fi on board. Astronauts browse the internet at 250 miles above Earth — same protocol, bigger antenna.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Section 5: Why This Matters ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-quote">
+          <blockquote>
+            "Every expert was once a beginner. Every rover started as someone's school project."
+          </blockquote>
+          <p class="debrief-card-text" style="margin-top: 16px;">
+            What you just did — connecting a device, sending a command, changing its behavior — is <strong>real engineering</strong>. Not a simulation. Not a game. You just programmed a physical machine. That's what engineers at NASA, SpaceX, and Google do every day.
+          </p>
+          <p class="debrief-card-text">
+            The only difference? They do it with bigger robots. <em>For now.</em>&nbsp; 😉
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Section 6: What's Coming Next ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-wide">
+          <div class="debrief-card-icon">🗺️</div>
+          <h2 class="debrief-card-title">Your mission roadmap</h2>
+          <p class="debrief-card-text">
+            First Contact was just the beginning. Here's what's ahead:
+          </p>
+          <div class="roadmap">
+            <div class="roadmap-item roadmap-done" data-reveal-child>
+              <div class="roadmap-marker">
+                <div class="roadmap-marker-inner">✓</div>
+              </div>
+              <div class="roadmap-content">
+                <h3>First Contact</h3>
+                <p>Connect, command, customize — <strong>done!</strong></p>
+              </div>
+            </div>
+            <div class="roadmap-item" data-reveal-child>
+              <div class="roadmap-marker">
+                <div class="roadmap-marker-inner">1</div>
+              </div>
+              <div class="roadmap-content">
+                <h3>Change How It Looks</h3>
+                <p>Draw custom faces, build animations for its OLED screen</p>
+              </div>
+            </div>
+            <div class="roadmap-item" data-reveal-child>
+              <div class="roadmap-marker">
+                <div class="roadmap-marker-inner">2</div>
+              </div>
+              <div class="roadmap-content">
+                <h3>Change How It Sounds</h3>
+                <p>Record your voice, upload sounds, give it a personality</p>
+              </div>
+            </div>
+            <div class="roadmap-item" data-reveal-child>
+              <div class="roadmap-marker">
+                <div class="roadmap-marker-inner">3</div>
+              </div>
+              <div class="roadmap-content">
+                <h3>Change How It Moves</h3>
+                <p>Choreograph gestures, teach it to dance and emote</p>
+              </div>
+            </div>
+            <div class="roadmap-item" data-reveal-child>
+              <div class="roadmap-marker">
+                <div class="roadmap-marker-inner">4</div>
+              </div>
+              <div class="roadmap-content">
+                <h3>Change How It Responds</h3>
+                <p>Build rules so the robot reacts to you — claps, sounds, your voice</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Section 7: Python & AI Sneak Peek ── -->
+      <div class="debrief-section" data-reveal>
+        <div class="debrief-card debrief-card-code">
+          <div class="debrief-card-icon">🐍</div>
+          <h2 class="debrief-card-title">Sneak peek: Python & AI</h2>
+          <p class="debrief-card-text">
+            Everything your robot just did was powered by code. Soon, <strong>you</strong> will write that code — in <strong>Python</strong>, the world's most popular programming language. And when you're ready, you'll teach your robot to <em>think</em> using AI.
+          </p>
+          <div class="code-preview">
+            <div class="code-window">
+              <div class="code-dots">
+                <span class="code-dot code-dot-red"></span>
+                <span class="code-dot code-dot-yellow"></span>
+                <span class="code-dot code-dot-green"></span>
+              </div>
+              <pre class="code-content"><code><span class="code-comment"># Your future code — Mission 5 preview</span>
+<span class="code-keyword">from</span> robot <span class="code-keyword">import</span> Dog
+
+my_dog = Dog(<span class="code-string">"Spark"</span>)
+my_dog.set_face(<span class="code-string">"happy"</span>)
+my_dog.say(<span class="code-string">"Hello, I'm Spark!"</span>)
+my_dog.wave()
+
+<span class="code-comment"># Ask AI to generate a response</span>
+response = my_dog.ask_ai(
+    <span class="code-string">"Tell me a fun fact about space"</span>
+)
+my_dog.say(response)</code></pre>
+            </div>
+          </div>
+          <p class="debrief-card-detail">
+            Python is used by NASA, Google, and every major AI company. Learning it now puts you ahead of 99% of people your age. And you'll learn it by making your robot do cool things — not by staring at a textbook.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── Final CTA ── -->
+      <div class="debrief-section debrief-final" data-reveal>
+        <div class="debrief-card debrief-card-wide" style="text-align:center;">
+          <h2 class="debrief-card-title" style="font-size: clamp(1.6rem, 4vw, 2.4rem);">
+            Ready to continue the adventure? 🚀
+          </h2>
+          <p class="debrief-card-text" style="max-width: 460px; margin: 0 auto;">
+            You've learned what Wi-Fi is, what's inside your robot, and how STEM connects to the real world. Mission 1 is waiting for you.
+          </p>
+          <button class="btn btn-primary btn-large btn-pulse" id="btn-continue-debrief" style="margin-top: 12px;">
+            Complete First Contact <span class="btn-icon">🏁</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 7: COMPLETION ==================== -->
   <section id="screen-complete" class="screen">
     <div class="screen-inner">
       <div class="label">Mission Complete</div>
@@ -348,7 +658,7 @@
       </div>
 
       <h1 class="title">First Contact <span class="highlight">complete!</span></h1>
-      <p class="subtitle">You connected, commanded, and customized your robot. You've done more with a robot than most people do in a year.</p>
+      <p class="subtitle">You connected, commanded, customized, and now <em>understand</em> your robot. You've done more with a robot than most people do in a year.</p>
       <p class="subtitle" style="font-weight:600; color:var(--gold-dark);">Mission 1 is ready for you.</p>
 
       <button class="btn btn-primary btn-large" id="btn-restart">

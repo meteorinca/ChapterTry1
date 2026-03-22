@@ -17,6 +17,10 @@
     const target = $(`#${id}`);
     requestAnimationFrame(() => {
       target.classList.add('active');
+      // If scrollable screen, scroll to top
+      if (target.classList.contains('screen-scroll')) {
+        target.scrollTop = 0;
+      }
     });
     target.querySelectorAll('.animate-in').forEach((el, i) => {
       el.style.animationDelay = `${0.1 + i * 0.12}s`;
@@ -46,13 +50,10 @@
       startX = pos.x;
       startY = pos.y;
 
-      // Grab current computed rotation from the animation
       const style = getComputedStyle(robot3d);
       const transform = style.transform;
       if (transform && transform !== 'none') {
-        // Parse the matrix3d to get approximate rotation angles
         const mat = new DOMMatrix(transform);
-        // Approximate Y rotation from the matrix
         rotY = Math.atan2(mat.m13, mat.m33) * (180 / Math.PI);
         rotX = Math.atan2(-mat.m23, Math.sqrt(mat.m13 * mat.m13 + mat.m33 * mat.m33)) * (180 / Math.PI);
       }
@@ -69,7 +70,7 @@
 
       rotY += dx * 0.6;
       rotX -= dy * 0.4;
-      rotX = Math.max(-45, Math.min(30, rotX)); // clamp vertical
+      rotX = Math.max(-45, Math.min(30, rotX));
 
       robot3d.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
     }
@@ -77,7 +78,6 @@
     function onEnd() {
       if (!isDragging) return;
       isDragging = false;
-      // Resume idle animation after a pause
       setTimeout(() => {
         if (!isDragging) {
           robot3d.classList.remove('dragging');
@@ -86,12 +86,10 @@
       }, 3000);
     }
 
-    // Mouse events
     scene.addEventListener('mousedown', onStart);
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onEnd);
 
-    // Touch events
     scene.addEventListener('touchstart', onStart, { passive: true });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
@@ -278,12 +276,10 @@
     if (waved) return;
     waved = true;
 
-    // Animate the 3D robot waving
     const robot = $('#wave-robot');
     robot.classList.add('robot-waving');
     celebrateFromElement(this, 50);
 
-    // Button feedback
     this.style.background = 'linear-gradient(135deg, #22D1C3 0%, #19A89D 100%)';
     this.innerHTML = '<span class="btn-icon" style="font-size:2.4rem;">🎉</span> Waving!';
 
@@ -352,16 +348,59 @@
     $('#face-success').classList.add('show');
   });
 
+  // Face picker now goes to debrief
   $('#btn-continue-faces').addEventListener('click', function () {
-    goTo('screen-complete');
+    goTo('screen-debrief');
+    // Allow a moment for the screen to render, then init reveal observer
+    setTimeout(initDebriefReveals, 300);
+  });
+
+  // ── SCREEN 6: Mission Debrief — Scroll Reveals ───
+  let debriefObserver = null;
+
+  function initDebriefReveals() {
+    const debriefScreen = $('#screen-debrief');
+    const sections = debriefScreen.querySelectorAll('[data-reveal]');
+
+    // Reset all reveals
+    sections.forEach((s) => s.classList.remove('revealed'));
+
+    // Kill old observer
+    if (debriefObserver) debriefObserver.disconnect();
+
+    // Create intersection observer rooted in the scrollable screen
+    debriefObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      },
+      {
+        root: debriefScreen,
+        rootMargin: '0px 0px -60px 0px',
+        threshold: 0.15,
+      }
+    );
+
+    sections.forEach((s) => debriefObserver.observe(s));
+  }
+
+  // Debrief → Completion
+  $('#btn-continue-debrief').addEventListener('click', function () {
+    celebrateFromElement(this, 40);
     setTimeout(() => {
-      const ring = $('#ring-fill');
-      ring.style.strokeDashoffset = 408 - 408 * 0.2;
-      celebrateCenter(80);
+      goTo('screen-complete');
+      setTimeout(() => {
+        const ring = $('#ring-fill');
+        ring.style.strokeDashoffset = 408 - 408 * 0.2;
+        celebrateCenter(80);
+      }, 400);
     }, 400);
   });
 
-  // ── SCREEN 6: Completion ─────────────────────────
+  // ── SCREEN 7: Completion ─────────────────────────
   $('#btn-restart').addEventListener('click', function () {
     connecting = false;
     waved = false;
@@ -396,6 +435,11 @@
     sendBtn.style.background = '';
     $('#send-progress-bar').style.width = '0%';
     $('#face-success').classList.remove('show');
+
+    // Reset debrief reveals
+    const debriefSections = $$('#screen-debrief [data-reveal]');
+    debriefSections.forEach((s) => s.classList.remove('revealed'));
+    if (debriefObserver) debriefObserver.disconnect();
 
     // Reset completion ring
     $('#ring-fill').style.strokeDashoffset = '408';

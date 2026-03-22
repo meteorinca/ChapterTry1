@@ -1,5 +1,5 @@
 /* ===== Mission Control — Design System ===== */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
   /* Brand */
@@ -106,6 +106,11 @@ body {
 }
 #screen-faces {
   background: var(--bg);
+}
+#screen-debrief {
+  background: linear-gradient(180deg, var(--bg) 0%, #FFF9EE 30%, var(--bg) 60%, #E0FBF8 100%);
+  justify-content: flex-start;
+  padding: 0;
 }
 #screen-complete {
   background: linear-gradient(160deg, #FFF9EE 0%, #E0FBF8 50%, #FFF3CC 100%);
@@ -224,21 +229,6 @@ body {
 }
 
 /* ===== 3D Robot Dog ===== */
-
-/*
- * Geometry reference (all faces form closed boxes):
- *   Body:  W=160  H=80   D=110   → half: 80, 40, 55
- *   Leg:   W=18   H=35   D=18    → half: 9, 17.5, 9
- *
- * Face placement formula (for a WxHxD box in a WxH container):
- *   Front:  translateZ(D/2)
- *   Back:   rotateY(180deg) translateZ(D/2)
- *   Left:   left:(W-D)/2  rotateY(-90deg) translateZ(W/2)
- *   Right:  left:(W-D)/2  rotateY(90deg)  translateZ(W/2)
- *   Top:    top:(H-D)/2   rotateX(90deg)  translateZ(H/2)
- *   Bottom: top:(H-D)/2   rotateX(-90deg) translateZ(H/2)
- */
-
 .robot-scene {
   perspective: 800px;
   width: 260px;
@@ -312,7 +302,6 @@ body {
   backface-visibility: hidden;
 }
 
-/* Front: 160×80, push out D/2=55 */
 .body-front {
   width: 160px;
   height: 80px;
@@ -324,7 +313,6 @@ body {
   background: linear-gradient(180deg, #F7D04C 0%, var(--gold) 100%);
 }
 
-/* Back: 160×80, flip + push D/2=55 */
 .body-back {
   width: 160px;
   height: 80px;
@@ -333,7 +321,6 @@ body {
   background: linear-gradient(180deg, #E8B830 0%, #D4A520 100%);
 }
 
-/* Left: 110×80, center with left:(160-110)/2=25, push W/2=80 */
 .body-left {
   width: 110px;
   height: 80px;
@@ -343,7 +330,6 @@ body {
   border-radius: 4px;
 }
 
-/* Right: 110×80, same centering, push W/2=80 */
 .body-right {
   width: 110px;
   height: 80px;
@@ -353,7 +339,6 @@ body {
   border-radius: 4px;
 }
 
-/* Top: 160×110, center with top:(80-110)/2=-15, push H/2=40 */
 .body-top {
   width: 160px;
   height: 110px;
@@ -363,7 +348,6 @@ body {
   border-radius: 12px;
 }
 
-/* Bottom: 160×110, same centering, push H/2=40 */
 .body-bottom {
   width: 160px;
   height: 110px;
@@ -405,7 +389,7 @@ body {
   45% { transform: scaleY(0.1); }
 }
 
-/* ─── Legs: W=18 × H=35 × D=18  (square cross-section) ─── */
+/* ─── Legs ─── */
 .legs-3d {
   position: absolute;
   width: 160px;
@@ -423,7 +407,6 @@ body {
   transform-origin: top center;
 }
 
-/* 4 legs at body corners */
 .leg-front-left  { left: 12px;  transform: translateZ(38px); }
 .leg-front-right { left: 130px; transform: translateZ(38px); }
 .leg-back-left   { left: 12px;  transform: translateZ(-38px); }
@@ -434,7 +417,6 @@ body {
   backface-visibility: hidden;
 }
 
-/* All leg faces are 18×35 in an 18×35 container (no centering offset) */
 .leg-front-face {
   width: 18px;
   height: 35px;
@@ -467,7 +449,6 @@ body {
   border-radius: 0 0 4px 4px;
 }
 
-/* Black foot at bottom of each leg face */
 .leg-foot {
   position: absolute;
   bottom: 0;
@@ -478,7 +459,7 @@ body {
   border-radius: 0 0 3px 3px;
 }
 
-/* ─── Floor shadow (flat, not rotated) ─── */
+/* ─── Floor shadow ─── */
 .robot-shadow {
   position: absolute;
   top: 120px;
@@ -893,21 +874,6 @@ body {
 
 .hidden { display: none !important; }
 
-/* ===== Responsive ===== */
-@media (max-width: 480px) {
-  .screen { padding: 16px; }
-  .screen-inner { gap: 18px; }
-  .btn { padding: 14px 32px; font-size: 1rem; }
-  .btn-large { padding: 16px 40px; font-size: 1.15rem; }
-  .wave-btn { width: 150px; height: 150px; font-size: 1.2rem; }
-  .face-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .robot-scene { transform: scale(0.75); }
-}
-
-@media (max-width: 360px) {
-  .face-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
 /* ===== Status Badge ===== */
 .status-badge {
   display: inline-flex;
@@ -956,4 +922,839 @@ body {
   10%  { opacity: 0.15; }
   90%  { opacity: 0.15; }
   100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+
+/* ========================================================================
+   MISSION DEBRIEF — Learning Journey (Scrollable Screen)
+   ======================================================================== */
+
+.screen-scroll {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.debrief-scroll {
+  width: 100%;
+  min-height: 100%;
+  padding-bottom: 80px;
+}
+
+/* ── Hero ── */
+.debrief-hero {
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  gap: 20px;
+}
+
+.debrief-hero .title {
+  animation: fade-in 1s var(--ease) 0.2s both;
+}
+
+.debrief-hero .subtitle {
+  animation: fade-in 1s var(--ease) 0.5s both;
+  max-width: 500px;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: fade-in 1s var(--ease) 1.2s both;
+  margin-top: 20px;
+}
+
+.scroll-cue-text {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.scroll-cue-arrow {
+  width: 24px;
+  height: 24px;
+  border-right: 2px solid var(--gray-400);
+  border-bottom: 2px solid var(--gray-400);
+  transform: rotate(45deg);
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: rotate(45deg) translateY(0); opacity: 1; }
+  50%      { transform: rotate(45deg) translateY(8px); opacity: 0.4; }
+}
+
+/* ── Section Container ── */
+.debrief-section {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  /* Reveal animation defaults */
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+
+.debrief-section.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Cards ── */
+.debrief-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-100);
+}
+
+.debrief-card-wide {
+  /* no extra width needed, inherits from section */
+}
+
+.debrief-card-icon {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+}
+
+.debrief-card-title {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.debrief-card-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--gray-600);
+  margin-bottom: 20px;
+}
+
+.debrief-card-text strong {
+  color: var(--gray-800);
+}
+
+.debrief-card-text em {
+  color: var(--teal-dark);
+  font-style: italic;
+}
+
+.debrief-card-detail {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--gray-600);
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.debrief-card-callout {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #FFF9EE, #FFF3CC);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--gray-800);
+  border-left: 4px solid var(--gold);
+}
+
+/* ── Journey Flow (What Just Happened) ── */
+.journey-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 28px 0;
+  flex-wrap: wrap;
+}
+
+.journey-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.6s var(--ease-bounce);
+}
+
+.debrief-section.revealed .journey-node,
+.debrief-section.revealed [data-reveal-child] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.journey-node:nth-child(1) { transition-delay: 0.1s; }
+.journey-node:nth-child(3) { transition-delay: 0.3s; }
+.journey-node:nth-child(5) { transition-delay: 0.5s; }
+.journey-node:nth-child(7) { transition-delay: 0.7s; }
+
+.journey-arrow {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  position: relative;
+  margin: 0 4px;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+  align-self: center;
+  margin-bottom: 24px;
+}
+
+.journey-arrow::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid var(--gold);
+  border-top: 2px solid var(--gold);
+  transform: rotate(45deg);
+}
+
+.debrief-section.revealed .journey-arrow {
+  opacity: 1;
+}
+
+.journey-arrow:nth-child(2) { transition-delay: 0.2s; }
+.journey-arrow:nth-child(4) { transition-delay: 0.4s; }
+.journey-arrow:nth-child(6) { transition-delay: 0.6s; }
+
+.journey-node-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.journey-node-you .journey-node-icon { background: var(--gold-light); }
+.journey-node-wifi .journey-node-icon { background: var(--teal-light); }
+.journey-node-brain .journey-node-icon { background: #F3E8FF; }
+.journey-node-move .journey-node-icon { background: #FFF3CC; }
+
+.journey-node span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  white-space: nowrap;
+}
+
+/* ── Wi-Fi Visualization ── */
+.wifi-viz {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin: 32px 0;
+  position: relative;
+  padding: 20px 0;
+}
+
+.wifi-device {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+.wifi-device-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--gray-100);
+}
+
+.wifi-device span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  white-space: nowrap;
+}
+
+.wifi-waves-container {
+  flex: 1;
+  max-width: 260px;
+  min-width: 120px;
+  height: 60px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wifi-wave {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--teal);
+  opacity: 0;
+  animation: wifi-ripple 3s ease-out infinite;
+}
+
+.wifi-wave-1 { animation-delay: 0s; }
+.wifi-wave-2 { animation-delay: 1s; }
+.wifi-wave-3 { animation-delay: 2s; }
+
+@keyframes wifi-ripple {
+  0%   { transform: scale(0.5); opacity: 0.7; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+.wifi-data-packet {
+  position: absolute;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  box-shadow: 0 0 16px rgba(34,209,195,0.4);
+  animation: packet-fly 3s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+@keyframes packet-fly {
+  0%   { transform: translateX(-60px); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(60px); opacity: 0; }
+}
+
+/* ── Fact Row ── */
+.debrief-fact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.debrief-fact {
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.6s var(--ease);
+}
+
+.debrief-section.revealed .debrief-fact:nth-child(1) { transition-delay: 0.3s; }
+.debrief-section.revealed .debrief-fact:nth-child(2) { transition-delay: 0.5s; }
+
+.debrief-section.revealed .debrief-fact {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.debrief-fact-num {
+  font-size: 1.6rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--teal), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+
+.debrief-fact-label {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  line-height: 1.4;
+}
+
+/* ── Chip Anatomy (ESP32) ── */
+.chip-anatomy {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  margin: 28px 0;
+  align-items: center;
+}
+
+.chip-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chip-body {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(145deg, #2D2D2A, #1A1A18);
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.chip-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--gray-400);
+  letter-spacing: 0.05em;
+}
+
+.chip-pins {
+  position: absolute;
+}
+
+.chip-pins-left,
+.chip-pins-right {
+  width: 6px;
+  height: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: repeating-linear-gradient(
+    to bottom,
+    #888 0px,
+    #888 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.chip-pins-left { left: -6px; }
+.chip-pins-right { right: -6px; }
+
+.chip-pins-top,
+.chip-pins-bottom {
+  height: 6px;
+  width: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(
+    to right,
+    #888 0px,
+    #888 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.chip-pins-top { top: -6px; }
+.chip-pins-bottom { bottom: -6px; }
+
+.chip-core {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--teal);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.chip-core-pulse {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: chip-pulse 2s ease-in-out infinite;
+}
+
+@keyframes chip-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.5); }
+  50%      { opacity: 1; transform: scale(1); }
+}
+
+.chip-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chip-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  opacity: 0;
+  transform: translateX(12px);
+  transition: all 0.5s var(--ease);
+}
+
+.debrief-section.revealed .chip-feature:nth-child(1) { transition-delay: 0.2s; }
+.debrief-section.revealed .chip-feature:nth-child(2) { transition-delay: 0.35s; }
+.debrief-section.revealed .chip-feature:nth-child(3) { transition-delay: 0.5s; }
+.debrief-section.revealed .chip-feature:nth-child(4) { transition-delay: 0.65s; }
+
+.debrief-section.revealed .chip-feature {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.chip-feature-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.chip-feature div {
+  display: flex;
+  flex-direction: column;
+}
+
+.chip-feature strong {
+  font-size: 0.9rem;
+  color: var(--gray-800);
+}
+
+.chip-feature span {
+  font-size: 0.8rem;
+  color: var(--gray-400);
+}
+
+/* ── STEM Grid ── */
+.stem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stem-card {
+  background: var(--gray-50);
+  border-radius: var(--radius);
+  padding: 24px 18px;
+  text-align: left;
+  transition: all 0.3s var(--ease);
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.debrief-section.revealed .stem-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.debrief-section.revealed .stem-card:nth-child(1) { transition-delay: 0.15s; }
+.debrief-section.revealed .stem-card:nth-child(2) { transition-delay: 0.3s; }
+.debrief-section.revealed .stem-card:nth-child(3) { transition-delay: 0.45s; }
+.debrief-section.revealed .stem-card:nth-child(4) { transition-delay: 0.6s; }
+
+.stem-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.stem-card-emoji {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.stem-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 6px;
+}
+
+.stem-card p {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+}
+
+/* ── Quote Card ── */
+.debrief-card-quote {
+  background: linear-gradient(135deg, #1A1A18 0%, #2D2D2A 100%);
+  color: var(--white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.debrief-card-quote::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(34,209,195,0.15), transparent 70%);
+  top: -50px;
+  right: -50px;
+  pointer-events: none;
+}
+
+.debrief-card-quote::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(245,200,66,0.1), transparent 70%);
+  bottom: -50px;
+  left: -50px;
+  pointer-events: none;
+}
+
+.debrief-card-quote blockquote {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--gold-light);
+  position: relative;
+  z-index: 1;
+}
+
+.debrief-card-quote blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  color: var(--gold);
+  opacity: 0.3;
+  position: absolute;
+  top: -20px;
+  left: -8px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.debrief-card-quote .debrief-card-text {
+  color: rgba(255,255,255,0.7);
+  position: relative;
+  z-index: 1;
+}
+
+.debrief-card-quote .debrief-card-text strong {
+  color: var(--white);
+}
+
+.debrief-card-quote .debrief-card-text em {
+  color: var(--gold);
+}
+
+/* ── Roadmap ── */
+.roadmap {
+  margin-top: 24px;
+  position: relative;
+  padding-left: 28px;
+}
+
+.roadmap::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--teal), var(--gold-light), var(--gray-200));
+}
+
+.roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 0;
+  position: relative;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: all 0.5s var(--ease);
+}
+
+.debrief-section.revealed .roadmap-item {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.debrief-section.revealed .roadmap-item:nth-child(1) { transition-delay: 0.1s; }
+.debrief-section.revealed .roadmap-item:nth-child(2) { transition-delay: 0.25s; }
+.debrief-section.revealed .roadmap-item:nth-child(3) { transition-delay: 0.4s; }
+.debrief-section.revealed .roadmap-item:nth-child(4) { transition-delay: 0.55s; }
+.debrief-section.revealed .roadmap-item:nth-child(5) { transition-delay: 0.7s; }
+
+.roadmap-marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 2px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: all 0.3s var(--ease);
+}
+
+.roadmap-done .roadmap-marker {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.roadmap-marker-inner {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray-400);
+}
+
+.roadmap-done .roadmap-marker-inner {
+  color: var(--white);
+}
+
+.roadmap-content {
+  text-align: left;
+  padding-top: 4px;
+}
+
+.roadmap-content h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 2px;
+}
+
+.roadmap-done .roadmap-content h3 {
+  color: var(--teal-dark);
+}
+
+.roadmap-content p {
+  font-size: 0.85rem;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+/* ── Code Preview (Python Sneak Peek) ── */
+.debrief-card-code {
+  overflow: hidden;
+}
+
+.code-preview {
+  margin: 24px 0 12px;
+}
+
+.code-window {
+  background: #1a1a2e;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.code-dots {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.2);
+}
+
+.code-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.code-dot-red { background: #ff5f57; }
+.code-dot-yellow { background: #ffbd2e; }
+.code-dot-green { background: #28ca41; }
+
+.code-content {
+  padding: 18px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.9;
+  color: #e8e8e8;
+  overflow-x: auto;
+  margin: 0;
+}
+
+.code-comment { color: #686878; font-style: italic; }
+.code-keyword { color: #c792ea; }
+.code-string { color: #c3e88d; }
+
+/* ── Debrief Final Section ── */
+.debrief-final {
+  padding-bottom: 80px;
+}
+
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .chip-anatomy {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .stem-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-flow {
+    gap: 0;
+  }
+
+  .journey-arrow {
+    width: 24px;
+  }
+
+  .wifi-viz {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .wifi-waves-container {
+    min-width: 200px;
+    height: 40px;
+  }
+
+  .debrief-fact-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .screen { padding: 16px; }
+  .screen-inner { gap: 18px; }
+  .btn { padding: 14px 32px; font-size: 1rem; }
+  .btn-large { padding: 16px 40px; font-size: 1.15rem; }
+  .wave-btn { width: 150px; height: 150px; font-size: 1.2rem; }
+  .face-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .robot-scene { transform: scale(0.75); }
+
+  .debrief-card {
+    padding: 24px 18px;
+  }
+
+  .debrief-hero {
+    min-height: 70vh;
+    padding: 32px 20px;
+  }
+
+  .journey-node-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .face-grid { grid-template-columns: repeat(2, 1fr); }
 }
