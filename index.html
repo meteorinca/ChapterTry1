@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mission Control — Your robot dog adventure starts here. First Contact: wake up your robot and make it yours.">
+  <title>Mission Control — First Contact</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+
+  <!-- Floating background particles -->
+  <div class="float-dots" id="float-dots" aria-hidden="true"></div>
+
+  <!-- Particle canvas for celebrations -->
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <!-- ==================== SCREEN 1: LOADING ==================== -->
+  <section id="screen-loading" class="screen active">
+    <div class="screen-inner">
+      <div class="label">Mission Control</div>
+
+      <!-- CSS Robot -->
+      <div class="robot-face-container robot-assemble" id="loading-robot">
+        <div class="robot-body">
+          <div class="robot-screen">
+            <div class="robot-eye"></div>
+            <div class="robot-eye"></div>
+          </div>
+        </div>
+        <div class="robot-legs">
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+        </div>
+      </div>
+
+      <p class="subtitle" style="animation: fade-in 0.8s ease 1.6s both;">Initializing systems<span class="loading-dots"></span></p>
+
+      <div class="start-btn-wrapper" id="start-btn-wrapper" style="opacity:0;">
+        <button class="btn btn-primary btn-large btn-pulse" id="btn-start">
+          <span class="btn-icon">🚀</span> Start Mission
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 2: WELCOME ==================== -->
+  <section id="screen-welcome" class="screen">
+    <div class="screen-inner">
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        Systems Online
+      </div>
+
+      <div class="robot-face-container" id="welcome-robot">
+        <div class="robot-body">
+          <div class="robot-screen">
+            <div class="robot-eye"></div>
+            <div class="robot-eye"></div>
+          </div>
+        </div>
+        <div class="robot-legs">
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+        </div>
+      </div>
+
+      <h1 class="title">Your robot is ready.<br><span class="highlight">Let's wake it up.</span></h1>
+      <p class="subtitle">In the next few minutes, you'll connect to your robot, see it move, and give it a brand new face.</p>
+
+      <button class="btn btn-primary btn-pulse" id="btn-continue-welcome">
+        Continue <span class="btn-icon">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 3: CONNECTION WIZARD ==================== -->
+  <section id="screen-connect" class="screen">
+    <div class="screen-inner">
+      <div class="label">Connection Wizard</div>
+      <h1 class="title">Let's <span class="highlight-teal">connect</span></h1>
+      <p class="subtitle">Follow these steps to link up with your robot.</p>
+
+      <div class="connect-steps" id="connect-steps">
+        <div class="connect-step" id="step-1" data-step="1">
+          <div class="step-icon">🔌</div>
+          <div class="step-text">Plug in the USB cable</div>
+        </div>
+        <div class="connect-step" id="step-2" data-step="2">
+          <div class="step-icon">⚡</div>
+          <div class="step-text">Press the power button</div>
+        </div>
+        <div class="connect-step" id="step-3" data-step="3">
+          <div class="step-icon">📡</div>
+          <div class="step-text">Searching for your robot…</div>
+        </div>
+        <div class="connect-step" id="step-4" data-step="4">
+          <div class="step-icon">✅</div>
+          <div class="step-text">Connected!</div>
+        </div>
+      </div>
+
+      <div class="connect-progress">
+        <div class="connect-progress-bar" id="connect-progress-bar"></div>
+      </div>
+
+      <button class="btn btn-teal" id="btn-connect" style="margin-top:8px;">
+        <span class="btn-icon">🔗</span> Begin Connection
+      </button>
+
+      <div class="wave-success" id="connect-success">
+        <button class="btn btn-primary btn-pulse" id="btn-continue-connect">
+          Awesome! Let's go <span class="btn-icon">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 4: WAVE TEST ==================== -->
+  <section id="screen-wave" class="screen">
+    <div class="screen-inner">
+      <div class="label">First Command</div>
+      <h1 class="title">Make it <span class="highlight">wave!</span></h1>
+      <p class="subtitle">Press the button and watch your robot say hello.</p>
+
+      <div class="robot-face-container" id="wave-robot">
+        <div class="robot-body">
+          <div class="robot-screen">
+            <div class="robot-eye"></div>
+            <div class="robot-eye"></div>
+          </div>
+        </div>
+        <div class="robot-legs">
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+          <div class="robot-leg"></div>
+        </div>
+      </div>
+
+      <button class="wave-btn" id="btn-wave">
+        <span class="btn-icon">🐾</span>
+        Wave
+      </button>
+
+      <div class="wave-success" id="wave-success">
+        <p class="subtitle" style="margin-bottom:4px;"><strong>It worked!</strong> Your robot just obeyed you. 🎉</p>
+        <button class="btn btn-primary btn-pulse" id="btn-continue-wave">
+          Next step <span class="btn-icon">→</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 5: FACE PICKER ==================== -->
+  <section id="screen-faces" class="screen">
+    <div class="screen-inner">
+      <div class="label">Customization</div>
+      <h1 class="title">Pick a <span class="highlight-teal">face</span></h1>
+      <p class="subtitle">Choose a personality for your robot's screen. You can always change it later.</p>
+
+      <div class="face-grid" id="face-grid">
+        <!-- Happy -->
+        <div class="face-card face-happy" data-face="happy" tabindex="0" role="button" aria-label="Happy face">
+          <div class="face-eyes">
+            <div class="pixel-eye"></div>
+            <div class="pixel-eye"></div>
+          </div>
+          <div class="face-mouth"></div>
+          <span class="face-label">Happy</span>
+        </div>
+        <!-- Curious -->
+        <div class="face-card face-curious" data-face="curious" tabindex="0" role="button" aria-label="Curious face">
+          <div class="face-eyes">
+            <div class="pixel-eye"></div>
+            <div class="pixel-eye"></div>
+          </div>
+          <div class="face-mouth"></div>
+          <span class="face-label">Curious</span>
+        </div>
+        <!-- Sleepy -->
+        <div class="face-card face-sleepy" data-face="sleepy" tabindex="0" role="button" aria-label="Sleepy face">
+          <div class="face-eyes">
+            <div class="pixel-eye"></div>
+            <div class="pixel-eye"></div>
+          </div>
+          <div class="face-mouth"></div>
+          <span class="face-label">Sleepy</span>
+        </div>
+        <!-- Excited -->
+        <div class="face-card face-excited" data-face="excited" tabindex="0" role="button" aria-label="Excited face">
+          <div class="face-eyes">
+            <div class="pixel-eye"></div>
+            <div class="pixel-eye"></div>
+          </div>
+          <div class="face-mouth"></div>
+          <span class="face-label">Excited</span>
+        </div>
+        <!-- Silly -->
+        <div class="face-card face-silly" data-face="silly" tabindex="0" role="button" aria-label="Silly face">
+          <div class="face-eyes">
+            <div class="pixel-eye"></div>
+            <div class="pixel-eye"></div>
+          </div>
+          <div class="face-mouth"></div>
+          <span class="face-label">Silly</span>
+        </div>
+      </div>
+
+      <button class="btn btn-teal" id="btn-send-face" disabled>
+        <span class="btn-icon">📤</span> Send to Robot
+      </button>
+
+      <div class="send-progress" id="send-progress">
+        <div class="send-progress-bar" id="send-progress-bar"></div>
+      </div>
+
+      <div class="wave-success" id="face-success">
+        <p class="subtitle"><strong>You just changed how it looks!</strong><br>That face is now on your robot's screen. 🤖✨</p>
+        <button class="btn btn-primary btn-pulse" id="btn-continue-faces">
+          Complete Mission <span class="btn-icon">🏁</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 6: COMPLETION ==================== -->
+  <section id="screen-complete" class="screen">
+    <div class="screen-inner">
+      <div class="label">Mission Complete</div>
+
+      <div class="progress-ring-container" id="progress-ring">
+        <svg class="progress-ring" width="160" height="160" viewBox="0 0 160 160">
+          <defs>
+            <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#22D1C3"/>
+              <stop offset="100%" stop-color="#F5C842"/>
+            </linearGradient>
+          </defs>
+          <circle class="progress-ring-bg" cx="80" cy="80" r="65"/>
+          <circle class="progress-ring-fill" id="ring-fill" cx="80" cy="80" r="65"/>
+        </svg>
+        <div class="progress-ring-text">
+          <span class="progress-ring-emoji">🎖️</span>
+          <span class="progress-ring-label">Complete</span>
+        </div>
+      </div>
+
+      <h1 class="title">First Contact <span class="highlight">complete!</span></h1>
+      <p class="subtitle">You connected, commanded, and customized your robot. You've done more with a robot than most people do in a year.</p>
+      <p class="subtitle" style="font-weight:600; color:var(--gold-dark);">Mission 1 is ready for you.</p>
+
+      <button class="btn btn-primary btn-large" id="btn-restart">
+        <span class="btn-icon">🔄</span> Restart Experience
+      </button>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
