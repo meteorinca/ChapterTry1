@@ -223,44 +223,176 @@ body {
   50%      { box-shadow: var(--shadow-lg), 0 0 0 14px rgba(245,200,66,0); }
 }
 
-/* ===== Robot Face (CSS Art) ===== */
-.robot-face-container {
-  position: relative;
-  width: 220px;
-  height: 150px;
-}
+/* ===== 3D Robot Dog ===== */
 
-.robot-body {
-  width: 220px;
-  height: 130px;
-  background: var(--gold);
-  border-radius: 20px;
-  position: relative;
-  box-shadow: var(--shadow-lg);
-}
+/*
+ * Geometry reference (all faces form closed boxes):
+ *   Body:  W=160  H=80   D=110   → half: 80, 40, 55
+ *   Leg:   W=18   H=35   D=18    → half: 9, 17.5, 9
+ *
+ * Face placement formula (for a WxHxD box in a WxH container):
+ *   Front:  translateZ(D/2)
+ *   Back:   rotateY(180deg) translateZ(D/2)
+ *   Left:   left:(W-D)/2  rotateY(-90deg) translateZ(W/2)
+ *   Right:  left:(W-D)/2  rotateY(90deg)  translateZ(W/2)
+ *   Top:    top:(H-D)/2   rotateX(90deg)  translateZ(H/2)
+ *   Bottom: top:(H-D)/2   rotateX(-90deg) translateZ(H/2)
+ */
 
-.robot-screen {
-  position: absolute;
-  top: 20px;
-  left: 30px;
-  width: 160px;
-  height: 80px;
-  background: var(--dark);
-  border-radius: var(--radius-sm);
-  border: 3px solid var(--gray-200);
+.robot-scene {
+  perspective: 800px;
+  width: 260px;
+  height: 200px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 30px;
-  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.robot-scene:active {
+  cursor: grabbing;
+}
+
+.robot-scene .drag-hint {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: var(--gray-400);
+  pointer-events: none;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+/* The 3D pivot that rotates */
+.robot-3d {
+  width: 160px;
+  height: 80px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: robot-idle-rotate 12s ease-in-out infinite;
+  transition: transform 0.1s linear;
+}
+
+.robot-3d.dragging {
+  animation: none !important;
+}
+
+@keyframes robot-assemble-3d {
+  0%   { transform: rotateX(40deg) rotateY(-120deg) scale(0.3); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: rotateX(-15deg) rotateY(-25deg) scale(1); opacity: 1; }
+}
+
+@keyframes robot-idle-rotate {
+  0%   { transform: rotateX(-15deg) rotateY(-25deg); }
+  25%  { transform: rotateX(-8deg)  rotateY(15deg); }
+  50%  { transform: rotateX(-18deg) rotateY(35deg); }
+  75%  { transform: rotateX(-10deg) rotateY(-10deg); }
+  100% { transform: rotateX(-15deg) rotateY(-25deg); }
+}
+
+/* ─── Body box: W=160 × H=80 × D=110 ─── */
+.body-3d {
+  position: absolute;
+  width: 160px;
+  height: 80px;
+  transform-style: preserve-3d;
+  top: 0;
+  left: 0;
+}
+
+.body-face {
+  position: absolute;
+  background: var(--gold);
+  backface-visibility: hidden;
+}
+
+/* Front: 160×80, push out D/2=55 */
+.body-front {
+  width: 160px;
+  height: 80px;
+  transform: translateZ(55px);
+  border-radius: 12px 12px 4px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #F7D04C 0%, var(--gold) 100%);
+}
+
+/* Back: 160×80, flip + push D/2=55 */
+.body-back {
+  width: 160px;
+  height: 80px;
+  transform: rotateY(180deg) translateZ(55px);
+  border-radius: 12px 12px 4px 4px;
+  background: linear-gradient(180deg, #E8B830 0%, #D4A520 100%);
+}
+
+/* Left: 110×80, center with left:(160-110)/2=25, push W/2=80 */
+.body-left {
+  width: 110px;
+  height: 80px;
+  left: 25px;
+  transform: rotateY(-90deg) translateZ(80px);
+  background: linear-gradient(180deg, #E8B830 0%, #D4A520 100%);
+  border-radius: 4px;
+}
+
+/* Right: 110×80, same centering, push W/2=80 */
+.body-right {
+  width: 110px;
+  height: 80px;
+  left: 25px;
+  transform: rotateY(90deg) translateZ(80px);
+  background: linear-gradient(180deg, #EDBE35 0%, #D9AD25 100%);
+  border-radius: 4px;
+}
+
+/* Top: 160×110, center with top:(80-110)/2=-15, push H/2=40 */
+.body-top {
+  width: 160px;
+  height: 110px;
+  top: -15px;
+  transform: rotateX(90deg) translateZ(40px);
+  background: linear-gradient(180deg, #FFE066 0%, var(--gold) 100%);
+  border-radius: 12px;
+}
+
+/* Bottom: 160×110, same centering, push H/2=40 */
+.body-bottom {
+  width: 160px;
+  height: 110px;
+  top: -15px;
+  transform: rotateX(-90deg) translateZ(40px);
+  background: #D4A520;
+  border-radius: 4px;
+}
+
+/* ─── Screen (on front face) ─── */
+.robot-screen-3d {
+  width: 110px;
+  height: 56px;
+  background: #111;
+  border-radius: 8px;
+  border: 3px solid #e0e0d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  box-shadow: inset 0 0 16px rgba(0,0,0,0.5);
 }
 
 .robot-eye {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   background: var(--teal);
   border-radius: 50%;
-  box-shadow: 0 0 12px var(--teal), 0 0 30px rgba(34,209,195,0.3);
+  box-shadow: 0 0 10px var(--teal), 0 0 20px rgba(34,209,195,0.35);
   animation: eye-blink 4s ease-in-out infinite;
 }
 
@@ -273,95 +405,115 @@ body {
   45% { transform: scaleY(0.1); }
 }
 
-/* Robot legs */
-.robot-legs {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-
-.robot-leg {
-  width: 18px;
-  height: 24px;
-  background: var(--gold);
-  border-radius: 0 0 6px 6px;
-  position: relative;
-}
-
-.robot-leg::after {
-  content: '';
+/* ─── Legs: W=18 × H=35 × D=18  (square cross-section) ─── */
+.legs-3d {
   position: absolute;
-  bottom: 0;
-  left: 2px;
-  right: 2px;
-  height: 6px;
-  background: var(--dark);
-  border-radius: 0 0 4px 4px;
+  width: 160px;
+  height: 35px;
+  top: 80px;
+  left: 0;
+  transform-style: preserve-3d;
 }
 
-/* Assembling animation */
-.robot-assemble .robot-body {
-  animation: assemble-body 1.2s var(--ease-bounce) forwards;
-}
-
-.robot-assemble .robot-screen {
-  animation: assemble-screen 0.8s var(--ease-bounce) 0.6s forwards;
-  opacity: 0;
-}
-
-.robot-assemble .robot-eye {
-  animation: assemble-eyes 0.5s var(--ease-bounce) 1.2s forwards, eye-blink 4s ease-in-out 2s infinite;
-  opacity: 0;
-}
-
-.robot-assemble .robot-leg {
-  animation: assemble-legs 0.6s var(--ease-bounce) forwards;
-  opacity: 0;
-}
-.robot-assemble .robot-leg:nth-child(1) { animation-delay: 0.3s; }
-.robot-assemble .robot-leg:nth-child(2) { animation-delay: 0.45s; }
-.robot-assemble .robot-leg:nth-child(3) { animation-delay: 0.35s; }
-.robot-assemble .robot-leg:nth-child(4) { animation-delay: 0.5s; }
-
-@keyframes assemble-body {
-  from { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-  to   { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-@keyframes assemble-screen {
-  from { opacity: 0; transform: scale(0.5); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes assemble-eyes {
-  from { opacity: 0; transform: scale(0); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes assemble-legs {
-  from { opacity: 0; transform: translateY(-20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Robot wave animation */
-.robot-waving .robot-leg:first-child {
-  animation: wave-leg 0.6s var(--ease-bounce) infinite alternate;
+.leg-3d {
+  position: absolute;
+  width: 18px;
+  height: 35px;
+  transform-style: preserve-3d;
   transform-origin: top center;
 }
 
-@keyframes wave-leg {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-35deg); }
+/* 4 legs at body corners */
+.leg-front-left  { left: 12px;  transform: translateZ(38px); }
+.leg-front-right { left: 130px; transform: translateZ(38px); }
+.leg-back-left   { left: 12px;  transform: translateZ(-38px); }
+.leg-back-right  { left: 130px; transform: translateZ(-38px); }
+
+.leg-face {
+  position: absolute;
+  backface-visibility: hidden;
 }
 
-/* Robot happy bounce */
-.robot-happy {
-  animation: happy-bounce 0.5s var(--ease-bounce) 3;
+/* All leg faces are 18×35 in an 18×35 container (no centering offset) */
+.leg-front-face {
+  width: 18px;
+  height: 35px;
+  background: var(--gold);
+  transform: translateZ(9px);
+  border-radius: 0 0 4px 4px;
 }
 
-@keyframes happy-bounce {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-12px); }
+.leg-back-face {
+  width: 18px;
+  height: 35px;
+  background: #D4A520;
+  transform: rotateY(180deg) translateZ(9px);
+  border-radius: 0 0 4px 4px;
+}
+
+.leg-left-face {
+  width: 18px;
+  height: 35px;
+  background: #E0B328;
+  transform: rotateY(-90deg) translateZ(9px);
+  border-radius: 0 0 4px 4px;
+}
+
+.leg-right-face {
+  width: 18px;
+  height: 35px;
+  background: #DAA820;
+  transform: rotateY(90deg) translateZ(9px);
+  border-radius: 0 0 4px 4px;
+}
+
+/* Black foot at bottom of each leg face */
+.leg-foot {
+  position: absolute;
+  bottom: 0;
+  left: 1px;
+  right: 1px;
+  height: 6px;
+  background: var(--dark);
+  border-radius: 0 0 3px 3px;
+}
+
+/* ─── Floor shadow (flat, not rotated) ─── */
+.robot-shadow {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  width: 140px;
+  height: 16px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(0,0,0,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ─── Wave animation ─── */
+.robot-waving .leg-front-left {
+  animation: wave-leg-3d 0.6s var(--ease-bounce) infinite alternate;
+}
+
+@keyframes wave-leg-3d {
+  from { transform: translateZ(38px) rotateX(0deg); }
+  to   { transform: translateZ(38px) rotateX(-40deg); }
+}
+
+/* ─── Happy bounce ─── */
+.robot-happy .robot-3d {
+  animation: happy-bounce-3d 0.5s var(--ease-bounce) 3 !important;
+}
+
+@keyframes happy-bounce-3d {
+  0%, 100% { transform: rotateX(-15deg) rotateY(-25deg) translateY(0); }
+  50%      { transform: rotateX(-15deg) rotateY(-25deg) translateY(-14px); }
+}
+
+/* ─── Assembly animation for loading screen ─── */
+.robot-assemble .robot-3d {
+  animation: robot-assemble-3d 1.6s var(--ease-bounce) forwards,
+             robot-idle-rotate 12s ease-in-out 1.8s infinite;
 }
 
 /* ===== Loading Screen Specifics ===== */
@@ -749,7 +901,7 @@ body {
   .btn-large { padding: 16px 40px; font-size: 1.15rem; }
   .wave-btn { width: 150px; height: 150px; font-size: 1.2rem; }
   .face-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  .robot-face-container { transform: scale(0.85); }
+  .robot-scene { transform: scale(0.75); }
 }
 
 @media (max-width: 360px) {

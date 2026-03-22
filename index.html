@@ -21,20 +21,53 @@
     <div class="screen-inner">
       <div class="label">Mission Control</div>
 
-      <!-- CSS Robot -->
-      <div class="robot-face-container robot-assemble" id="loading-robot">
-        <div class="robot-body">
-          <div class="robot-screen">
-            <div class="robot-eye"></div>
-            <div class="robot-eye"></div>
+      <!-- 3D Robot -->
+      <div class="robot-scene robot-assemble" id="loading-robot">
+        <div class="robot-3d">
+          <!-- Body (6-sided box) -->
+          <div class="body-3d">
+            <div class="body-face body-front">
+              <div class="robot-screen-3d">
+                <div class="robot-eye"></div>
+                <div class="robot-eye"></div>
+              </div>
+            </div>
+            <div class="body-face body-back"></div>
+            <div class="body-face body-left"></div>
+            <div class="body-face body-right"></div>
+            <div class="body-face body-top"></div>
+            <div class="body-face body-bottom"></div>
           </div>
+          <!-- Legs -->
+          <div class="legs-3d">
+            <div class="leg-3d leg-front-left">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-front-right">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-back-left">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-back-right">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+          </div>
+          <div class="robot-shadow"></div>
         </div>
-        <div class="robot-legs">
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-        </div>
+        <span class="drag-hint">drag to rotate</span>
       </div>
 
       <p class="subtitle" style="animation: fade-in 0.8s ease 1.6s both;">Initializing systems<span class="loading-dots"></span></p>
@@ -55,19 +88,51 @@
         Systems Online
       </div>
 
-      <div class="robot-face-container" id="welcome-robot">
-        <div class="robot-body">
-          <div class="robot-screen">
-            <div class="robot-eye"></div>
-            <div class="robot-eye"></div>
+      <!-- 3D Robot -->
+      <div class="robot-scene" id="welcome-robot">
+        <div class="robot-3d">
+          <div class="body-3d">
+            <div class="body-face body-front">
+              <div class="robot-screen-3d">
+                <div class="robot-eye"></div>
+                <div class="robot-eye"></div>
+              </div>
+            </div>
+            <div class="body-face body-back"></div>
+            <div class="body-face body-left"></div>
+            <div class="body-face body-right"></div>
+            <div class="body-face body-top"></div>
+            <div class="body-face body-bottom"></div>
           </div>
+          <div class="legs-3d">
+            <div class="leg-3d leg-front-left">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-front-right">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-back-left">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-back-right">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+          </div>
+          <div class="robot-shadow"></div>
         </div>
-        <div class="robot-legs">
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-        </div>
+        <span class="drag-hint">drag to rotate</span>
       </div>
 
       <h1 class="title">Your robot is ready.<br><span class="highlight">Let's wake it up.</span></h1>
@@ -128,18 +193,49 @@
       <h1 class="title">Make it <span class="highlight">wave!</span></h1>
       <p class="subtitle">Press the button and watch your robot say hello.</p>
 
-      <div class="robot-face-container" id="wave-robot">
-        <div class="robot-body">
-          <div class="robot-screen">
-            <div class="robot-eye"></div>
-            <div class="robot-eye"></div>
+      <!-- 3D Robot -->
+      <div class="robot-scene" id="wave-robot">
+        <div class="robot-3d">
+          <div class="body-3d">
+            <div class="body-face body-front">
+              <div class="robot-screen-3d">
+                <div class="robot-eye"></div>
+                <div class="robot-eye"></div>
+              </div>
+            </div>
+            <div class="body-face body-back"></div>
+            <div class="body-face body-left"></div>
+            <div class="body-face body-right"></div>
+            <div class="body-face body-top"></div>
+            <div class="body-face body-bottom"></div>
           </div>
-        </div>
-        <div class="robot-legs">
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
-          <div class="robot-leg"></div>
+          <div class="legs-3d">
+            <div class="leg-3d leg-front-left">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-front-right">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-back-left">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+            <div class="leg-3d leg-back-right">
+              <div class="leg-face leg-front-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-back-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-left-face"><div class="leg-foot"></div></div>
+              <div class="leg-face leg-right-face"><div class="leg-foot"></div></div>
+            </div>
+          </div>
+          <div class="robot-shadow"></div>
         </div>
       </div>
 

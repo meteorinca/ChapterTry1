@@ -15,15 +15,90 @@
   function goTo(id) {
     screens.forEach((s) => s.classList.remove('active'));
     const target = $(`#${id}`);
-    // small delay so the exit transition plays
     requestAnimationFrame(() => {
       target.classList.add('active');
     });
-    // animate children
     target.querySelectorAll('.animate-in').forEach((el, i) => {
       el.style.animationDelay = `${0.1 + i * 0.12}s`;
     });
   }
+
+  // ── 3D Robot Drag-to-Rotate ──────────────────────
+  function initRobotDrag(scene) {
+    const robot3d = scene.querySelector('.robot-3d');
+    if (!robot3d) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let rotX = -10;
+    let rotY = -25;
+
+    function getPointer(e) {
+      if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    function onStart(e) {
+      isDragging = true;
+      robot3d.classList.add('dragging');
+      const pos = getPointer(e);
+      startX = pos.x;
+      startY = pos.y;
+
+      // Grab current computed rotation from the animation
+      const style = getComputedStyle(robot3d);
+      const transform = style.transform;
+      if (transform && transform !== 'none') {
+        // Parse the matrix3d to get approximate rotation angles
+        const mat = new DOMMatrix(transform);
+        // Approximate Y rotation from the matrix
+        rotY = Math.atan2(mat.m13, mat.m33) * (180 / Math.PI);
+        rotX = Math.atan2(-mat.m23, Math.sqrt(mat.m13 * mat.m13 + mat.m33 * mat.m33)) * (180 / Math.PI);
+      }
+    }
+
+    function onMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      const pos = getPointer(e);
+      const dx = pos.x - startX;
+      const dy = pos.y - startY;
+      startX = pos.x;
+      startY = pos.y;
+
+      rotY += dx * 0.6;
+      rotX -= dy * 0.4;
+      rotX = Math.max(-45, Math.min(30, rotX)); // clamp vertical
+
+      robot3d.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+    }
+
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      // Resume idle animation after a pause
+      setTimeout(() => {
+        if (!isDragging) {
+          robot3d.classList.remove('dragging');
+          robot3d.style.transform = '';
+        }
+      }, 3000);
+    }
+
+    // Mouse events
+    scene.addEventListener('mousedown', onStart);
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+
+    // Touch events
+    scene.addEventListener('touchstart', onStart, { passive: true });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+  }
+
+  // Initialize drag on all robot scenes
+  $$('.robot-scene').forEach(initRobotDrag);
 
   // ── Floating Background Dots ─────────────────────
   function spawnFloatingDots() {
@@ -56,7 +131,7 @@
   window.addEventListener('resize', resizeCanvas);
   resizeCanvas();
 
-  function spawnParticles(x, y, count = 40, spread = 200) {
+  function spawnParticles(x, y, count = 40) {
     const colors = ['#F5C842', '#22D1C3', '#FF6B6B', '#fff', '#D4A520', '#19A89D'];
     for (let i = 0; i < count; i++) {
       const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
@@ -86,7 +161,7 @@
     particles.forEach((p) => {
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.12; // gravity
+      p.vy += 0.12;
       p.life -= p.decay;
       p.rotation += p.rotSpeed;
       if (p.life <= 0) return;
@@ -116,7 +191,7 @@
   function celebrateCenter(count = 60) {
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
-    spawnParticles(cx, cy, count, 300);
+    spawnParticles(cx, cy, count);
   }
 
   function celebrateFromElement(el, count = 40) {
@@ -128,7 +203,7 @@
 
   // ── SCREEN 1: Loading ────────────────────────────
   async function initLoading() {
-    await wait(2800); // let assembly animation play
+    await wait(2800);
     const wrapper = $('#start-btn-wrapper');
     wrapper.style.opacity = '1';
     wrapper.style.animation = 'fade-in 0.8s var(--ease) forwards';
@@ -203,7 +278,7 @@
     if (waved) return;
     waved = true;
 
-    // Animate the robot waving
+    // Animate the 3D robot waving
     const robot = $('#wave-robot');
     robot.classList.add('robot-waving');
     celebrateFromElement(this, 50);
@@ -212,11 +287,12 @@
     this.style.background = 'linear-gradient(135deg, #22D1C3 0%, #19A89D 100%)';
     this.innerHTML = '<span class="btn-icon" style="font-size:2.4rem;">🎉</span> Waving!';
 
-    await wait(2000);
+    await wait(2500);
     robot.classList.remove('robot-waving');
     robot.classList.add('robot-happy');
 
     await wait(800);
+    robot.classList.remove('robot-happy');
     $('#wave-success').classList.add('show');
   });
 
@@ -236,14 +312,12 @@
       selectedFace = this.dataset.face;
       sendBtn.disabled = false;
 
-      // Quick pop animation
       this.style.transform = 'translateY(-4px) scale(1.05)';
       setTimeout(() => {
         this.style.transform = 'translateY(-4px) scale(1)';
       }, 200);
     });
 
-    // Keyboard support
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -280,11 +354,8 @@
 
   $('#btn-continue-faces').addEventListener('click', function () {
     goTo('screen-complete');
-    // Animate the ring
     setTimeout(() => {
       const ring = $('#ring-fill');
-      // 408 is full circumference, so offset 0 = 100%
-      // For intro chapter = 20% of the full 4-mission journey
       ring.style.strokeDashoffset = 408 - 408 * 0.2;
       celebrateCenter(80);
     }, 400);
@@ -292,7 +363,6 @@
 
   // ── SCREEN 6: Completion ─────────────────────────
   $('#btn-restart').addEventListener('click', function () {
-    // Reset all state
     connecting = false;
     waved = false;
     selectedFace = null;
@@ -331,7 +401,6 @@
     $('#ring-fill').style.strokeDashoffset = '408';
 
     goTo('screen-loading');
-    // Re-trigger loading
     setTimeout(initLoading, 100);
   });
 
