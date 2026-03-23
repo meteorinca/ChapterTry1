@@ -319,13 +319,706 @@
       <div class="wave-success" id="face-success">
         <p class="subtitle"><strong>You just changed how it looks!</strong><br>That face is now on your robot's screen. 🤖✨</p>
         <button class="btn btn-primary btn-pulse" id="btn-continue-faces">
-          See How It Works <span class="btn-icon">🔬</span>
+          Start Learning Python <span class="btn-icon">🐍</span>
         </button>
       </div>
     </div>
   </section>
 
-  <!-- ==================== SCREEN 6: MISSION DEBRIEF — LEARNING JOURNEY ==================== -->
+  <!-- ==================== SCREEN 6: PYTHON LESSONS ==================== -->
+  <section id="screen-lessons" class="screen screen-scroll">
+    <div class="lessons-scroll">
+
+      <!-- Lessons Top Bar -->
+      <div class="lessons-topbar">
+        <div class="lessons-topbar-inner">
+          <div class="label">Week 1 · Python Foundations</div>
+          <div class="lessons-progress-bar">
+            <div class="lessons-progress-fill" id="lessons-progress-fill"></div>
+          </div>
+          <span class="lessons-progress-text" id="lessons-progress-text">0 / 8</span>
+        </div>
+      </div>
+
+      <!-- ── LESSON 1: Output is Evidence ── -->
+      <div class="lesson-block" id="lesson-1" data-lesson="1">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 1</span>
+          <h2 class="lesson-title">Output is Evidence</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Understand that <code>print()</code> sends visible output and that quotes mean text.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 Key Ideas</h3>
+          <ul>
+            <li>Code is instructions — the computer follows them exactly.</li>
+            <li>Python runs <strong>top to bottom</strong>, one line at a time.</li>
+            <li><code>print()</code> shows a value on screen — it's how you see what your code does.</li>
+            <li>Text must go inside <strong>quotes</strong> — that's how Python knows it's text, not a command.</li>
+          </ul>
+        </div>
+
+        <!-- Prediction Task 1 -->
+        <div class="lesson-task">
+          <h3>🔮 Predict</h3>
+          <p>Before you run this, what do you think will appear?</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-1a" spellcheck="false" readonly>print("Hello")
+print("Robot")</textarea>
+          </div>
+          <div class="prediction-box">
+            <label for="predict-1a">Write your prediction:</label>
+            <input type="text" id="predict-1a" class="prediction-input" placeholder="What will print?">
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="1a">▶ Run</button>
+          <div class="output-console" id="output-1a"></div>
+          <div class="prediction-result" id="result-1a"></div>
+        </div>
+
+        <!-- Prediction Task 2 -->
+        <div class="lesson-task">
+          <h3>🔮 Predict Again</h3>
+          <p>Now what about this? Look carefully — what's different?</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-1b" spellcheck="false" readonly>print("Hello")
+print("Hello")</textarea>
+          </div>
+          <div class="prediction-box">
+            <label for="predict-1b">Your prediction:</label>
+            <input type="text" id="predict-1b" class="prediction-input" placeholder="What will print this time?">
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="1b">▶ Run</button>
+          <div class="output-console" id="output-1b"></div>
+        </div>
+
+        <!-- Debugging Task -->
+        <div class="lesson-task lesson-task-debug">
+          <h3>🐛 Debug This</h3>
+          <p>This code is broken. Can you fix it?</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Fix me!</span></div>
+            <textarea class="code-editor" id="editor-1c" spellcheck="false">print(Hello)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="1c">▶ Run</button>
+          <div class="output-console" id="output-1c"></div>
+          <div class="hint-box" id="hint-1c">
+            <button class="hint-toggle">💡 Need a hint?</button>
+            <p class="hint-text">Python sees <code>Hello</code> without quotes and thinks it's a variable name — but no variable called <code>Hello</code> exists! Add quotes around it to make it text.</p>
+          </div>
+        </div>
+
+        <!-- Why Question -->
+        <div class="lesson-task lesson-task-why">
+          <h3>🤔 Think About It</h3>
+          <ul class="why-questions">
+            <li>Why did Python complain about <code>Hello</code> without quotes?</li>
+            <li>What's the difference between <code>Hello</code> and <code>"Hello"</code>?</li>
+          </ul>
+          <textarea class="reflection-input" placeholder="Explain in your own words…"></textarea>
+        </div>
+
+        <!-- Mini Challenge -->
+        <div class="lesson-task lesson-task-challenge">
+          <h3>🚀 Mini Challenge</h3>
+          <p>Print three lines: your name, your robot's name, and a mission sentence.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Your code</span></div>
+            <textarea class="code-editor" id="editor-1d" spellcheck="false">print("Your name here")
+print("Robot name here")
+print("We are going to...")</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="1d">▶ Run</button>
+          <div class="output-console" id="output-1d"></div>
+        </div>
+
+        <!-- What You Learned -->
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>Output is a <strong>result</strong> of code — <code>print()</code> makes it visible.</li>
+            <li><strong>Quotes matter</strong> — they tell Python "this is text."</li>
+            <li>Syntax mistakes matter — one missing quote breaks everything.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="2">
+          Next: Variables <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 2: Variables are Labeled Memory ── -->
+      <div class="lesson-block" id="lesson-2" data-lesson="2" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 2</span>
+          <h2 class="lesson-title">Variables are Labeled Memory</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Understand that variables store values, and names point to data.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 Key Ideas</h3>
+          <ul>
+            <li>A variable is a <strong>label</strong> — it points to a value stored in memory.</li>
+            <li><code>robot_name = "Bolt"</code> means "store this text under this name."</li>
+            <li>Later, you can use the name again and Python remembers the value.</li>
+          </ul>
+        </div>
+
+        <div class="lesson-task">
+          <h3>🔮 Predict</h3>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-2a" spellcheck="false" readonly>robot_name = "Bolt"
+print(robot_name)</textarea>
+          </div>
+          <div class="prediction-box">
+            <label for="predict-2a">What will print?</label>
+            <input type="text" id="predict-2a" class="prediction-input" placeholder="Your prediction…">
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="2a">▶ Run</button>
+          <div class="output-console" id="output-2a"></div>
+        </div>
+
+        <div class="lesson-task">
+          <h3>🔮 Predict — Reassignment</h3>
+          <p>This one is tricky. Think carefully.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-2b" spellcheck="false" readonly>robot_name = "Bolt"
+robot_name = "Nova"
+print(robot_name)</textarea>
+          </div>
+          <div class="prediction-box">
+            <label for="predict-2b">What prints?</label>
+            <input type="text" id="predict-2b" class="prediction-input" placeholder="Bolt or Nova?">
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="2b">▶ Run</button>
+          <div class="output-console" id="output-2b"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-why">
+          <h3>🤔 Explain</h3>
+          <p>Why is the answer <code>Nova</code> and not <code>Bolt</code>?</p>
+          <textarea class="reflection-input" placeholder="Because…"></textarea>
+        </div>
+
+        <div class="lesson-task lesson-task-debug">
+          <h3>🐛 Debug This</h3>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Fix me!</span></div>
+            <textarea class="code-editor" id="editor-2c" spellcheck="false">battery = 90
+print("Battery: " + battery)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="2c">▶ Run</button>
+          <div class="output-console" id="output-2c"></div>
+          <div class="hint-box" id="hint-2c">
+            <button class="hint-toggle">💡 Need a hint?</button>
+            <p class="hint-text">You can't add a string and a number with <code>+</code>. Try <code>str(battery)</code> to convert the number to text, or use an f-string: <code>f"Battery: {battery}"</code></p>
+          </div>
+        </div>
+
+        <div class="lesson-task lesson-task-challenge">
+          <h3>🚀 Mini Challenge</h3>
+          <p>Create variables for your robot's name, battery, and mood. Then print them.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Your code</span></div>
+            <textarea class="code-editor" id="editor-2d" spellcheck="false">robot_name = "Spark"
+battery = 85
+mood = "happy"
+
+print(robot_name)
+print(battery)
+print(mood)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="2d">▶ Run</button>
+          <div class="output-console" id="output-2d"></div>
+        </div>
+
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>Variables can <strong>change</strong> — the last value wins.</li>
+            <li>Strings and numbers are <strong>different types</strong> — you can't just smash them together.</li>
+            <li>Names aren't magic — they just <strong>hold values</strong>.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="3">
+          Next: Types <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 3: Types Change What Code Can Do ── -->
+      <div class="lesson-block" id="lesson-3" data-lesson="3" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 3</span>
+          <h2 class="lesson-title">Types Change What Code Can Do</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Understand strings, integers, floats, booleans as useful categories — not vocab words.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 Key Ideas</h3>
+          <ul>
+            <li><strong>String</strong> = text → <code>"Paulbot"</code></li>
+            <li><strong>Integer</strong> = whole number → <code>85</code></li>
+            <li><strong>Float</strong> = decimal number → <code>72.5</code></li>
+            <li><strong>Boolean</strong> = True or False → <code>True</code></li>
+          </ul>
+        </div>
+
+        <div class="lesson-task">
+          <h3>🔮 Predict — What can you do?</h3>
+          <p><strong>Can you add 2 to <code>"Paulbot"</code>?</strong> Can you add 2 to <code>85</code>? Can you compare <code>battery > 20</code>?</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-3a" spellcheck="false">name = "Paulbot"
+battery = 85
+temperature = 72.5
+ready = True
+
+print(type(name))
+print(type(battery))
+print(type(temperature))
+print(type(ready))
+print(battery + 2)
+print(battery > 20)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="3a">▶ Run</button>
+          <div class="output-console" id="output-3a"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-challenge">
+          <h3>🚀 Robot Status Card</h3>
+          <p>Make a full robot status card and print a readable report.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Your code</span></div>
+            <textarea class="code-editor" id="editor-3b" spellcheck="false">name = "Paulbot"
+battery = 82
+temperature = 24.5
+ready = True
+
+print("Robot Status Report")
+print("Name: " + name)
+print("Battery: " + str(battery) + "%")
+print("Temp: " + str(temperature) + "°C")
+print("Ready: " + str(ready))</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="3b">▶ Run</button>
+          <div class="output-console" id="output-3b"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-why">
+          <h3>🤔 Think About It</h3>
+          <ul class="why-questions">
+            <li>Why does <code>"Paulbot" + 2</code> fail but <code>85 + 2</code> works?</li>
+            <li>Why does Python care about the <em>type</em> of data?</li>
+          </ul>
+          <textarea class="reflection-input" placeholder="Because the type tells Python what operations make sense…"></textarea>
+        </div>
+
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>Not just definitions — <strong>data type affects behavior</strong>.</li>
+            <li>You can't do math on text or concatenate numbers to strings without converting first.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="4">
+          Next: f-strings <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 4: Build Messages with f-strings ── -->
+      <div class="lesson-block" id="lesson-4" data-lesson="4" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 4</span>
+          <h2 class="lesson-title">Build Messages with f-strings</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Use f-strings because they solve a real problem — ugly concatenation.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 The Problem</h3>
+          <p>Concatenation with <code>+</code> is messy, especially with numbers:</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>The ugly way</span></div>
+            <textarea class="code-editor" id="editor-4pre" spellcheck="false" readonly>print("Robot: " + robot_name + " Battery: " + str(battery))</textarea>
+          </div>
+          <p style="margin-top:12px;">f-strings fix this: put <code>f</code> before the quotes, and <code>{variable}</code> inside:</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>The clean way</span></div>
+            <textarea class="code-editor" id="editor-4pre2" spellcheck="false" readonly>print(f"Robot: {robot_name} Battery: {battery}")</textarea>
+          </div>
+        </div>
+
+        <div class="lesson-task">
+          <h3>🔮 Predict</h3>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-4a" spellcheck="false" readonly>battery = 80
+print(f"Battery left: {battery}%")
+print(f"Half battery: {battery / 2}%")</textarea>
+          </div>
+          <div class="prediction-box">
+            <label for="predict-4a">What will print?</label>
+            <input type="text" id="predict-4a" class="prediction-input" placeholder="Your prediction…">
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="4a">▶ Run</button>
+          <div class="output-console" id="output-4a"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-challenge">
+          <h3>🚀 Dashboard Challenge</h3>
+          <p>Build a dashboard with name, battery, estimated runtime, and speed using f-strings.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Your code</span></div>
+            <textarea class="code-editor" id="editor-4b" spellcheck="false">name = "Spark"
+battery = 80
+speed = 2.5
+runtime = battery / 12
+
+print(f"=== Robot Dashboard ===")
+print(f"Name: {name}")
+print(f"Battery: {battery}%")
+print(f"Speed: {speed} m/s")
+print(f"Runtime: {runtime:.1f} hours")</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="4b">▶ Run</button>
+          <div class="output-console" id="output-4b"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-why">
+          <h3>🤔 Think About It</h3>
+          <p>What does <code>{runtime:.1f}</code> do? Why is formatting not just decoration?</p>
+          <textarea class="reflection-input" placeholder="Formatting is how programmers make data…"></textarea>
+        </div>
+
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>Formatting is not decoration — it's how programmers <strong>make data readable</strong>.</li>
+            <li>f-strings handle numbers automatically — no need for <code>str()</code>.</li>
+            <li>You can do <strong>calculations inside</strong> the curly braces.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="5">
+          Next: Sequence <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 5: Sequence and State ── -->
+      <div class="lesson-block" id="lesson-5" data-lesson="5" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 5</span>
+          <h2 class="lesson-title">Sequence and State</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Understand that order changes behavior. This is the bridge to robot control.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 Key Ideas</h3>
+          <ul>
+            <li>Python runs <strong>line by line</strong>, top to bottom.</li>
+            <li>If you change the <strong>order</strong>, you change the result.</li>
+            <li>This is why a robot <em>waking up then speaking</em> feels different from <em>speaking then waking up</em>.</li>
+          </ul>
+        </div>
+
+        <div class="lesson-task">
+          <h3>🔮 Predict the Robot Behavior</h3>
+          <p>Imagine these run on your real robot. How would the sequence <em>feel</em>?</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Sequence A</span></div>
+            <textarea class="code-editor" id="editor-5a" spellcheck="false" readonly>my_dog.set_face("sleepy")
+my_dog.say("Good morning")
+my_dog.stand()</textarea>
+          </div>
+          <div class="code-editor-block" style="margin-top:12px;">
+            <div class="code-editor-header"><span>Sequence B</span></div>
+            <textarea class="code-editor" id="editor-5b" spellcheck="false" readonly>my_dog.stand()
+my_dog.say("Good morning")
+my_dog.set_face("sleepy")</textarea>
+          </div>
+          <div class="prediction-box">
+            <label for="predict-5">Same commands, different order. Why does it feel different?</label>
+            <textarea class="reflection-input" id="predict-5" placeholder="Sequence A feels like… Sequence B feels like…"></textarea>
+          </div>
+        </div>
+
+        <div class="lesson-task lesson-task-challenge">
+          <h3>🚀 Mini Challenge</h3>
+          <p>Write a 4-step robot wake-up routine. Think about what order makes the most sense.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Your code</span></div>
+            <textarea class="code-editor" id="editor-5c" spellcheck="false">from robot import Dog
+my_dog = Dog("Spark")
+
+# Write your 4-step wake-up routine:
+my_dog.set_face("sleepy")
+my_dog.say("*yawns*")
+my_dog.stand()
+my_dog.set_face("happy")</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="5c">▶ Run</button>
+          <div class="output-console" id="output-5c"></div>
+        </div>
+
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>Programming is not just commands — it is <strong>sequence</strong>.</li>
+            <li>The same commands in a different order create a completely different experience.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="6">
+          Next: Modules <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 6: Functions from a Module ── -->
+      <div class="lesson-block" id="lesson-6" data-lesson="6" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 6</span>
+          <h2 class="lesson-title">Functions from a Module</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Understand what <code>from robot import Dog</code> really means.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 Key Ideas</h3>
+          <ul>
+            <li>A <strong>module</strong> is a file of Python tools someone else wrote.</li>
+            <li><code>Dog</code> is one tool inside the <code>robot</code> module.</li>
+            <li>Importing lets you <strong>use code someone else wrote</strong>.</li>
+            <li><code>my_dog = Dog("Spark")</code> creates an object with abilities — stored in <code>my_dog</code>.</li>
+          </ul>
+        </div>
+
+        <div class="lesson-task">
+          <h3>🏷️ Label the Parts</h3>
+          <p>Look at each line. Answer: which part loads code? Which creates the robot? Which makes it speak?</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" id="editor-6a" spellcheck="false" readonly>from robot import Dog       # Line A
+my_dog = Dog("Spark")       # Line B
+my_dog.say("Hi!")            # Line C</textarea>
+          </div>
+          <div class="label-exercise">
+            <div class="label-row">
+              <span class="label-q">Which line loads code from a module?</span>
+              <select class="label-select" data-answer="A">
+                <option value="">Pick…</option>
+                <option value="A">Line A</option>
+                <option value="B">Line B</option>
+                <option value="C">Line C</option>
+              </select>
+              <span class="label-feedback"></span>
+            </div>
+            <div class="label-row">
+              <span class="label-q">Which line creates the robot?</span>
+              <select class="label-select" data-answer="B">
+                <option value="">Pick…</option>
+                <option value="A">Line A</option>
+                <option value="B">Line B</option>
+                <option value="C">Line C</option>
+              </select>
+              <span class="label-feedback"></span>
+            </div>
+            <div class="label-row">
+              <span class="label-q">Which line makes it speak?</span>
+              <select class="label-select" data-answer="C">
+                <option value="">Pick…</option>
+                <option value="A">Line A</option>
+                <option value="B">Line B</option>
+                <option value="C">Line C</option>
+              </select>
+              <span class="label-feedback"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lesson-task lesson-task-why">
+          <h3>🤔 Plain-English Explanation</h3>
+          <p>Explain this code to a 10-year-old with no coding experience:</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python</span></div>
+            <textarea class="code-editor" readonly spellcheck="false">from robot import Dog
+my_dog = Dog("Spark")
+my_dog.say("Hello!")</textarea>
+          </div>
+          <textarea class="reflection-input" placeholder="It's like opening a toolbox and…"></textarea>
+        </div>
+
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>You can read code <strong>structurally</strong> — imports, creation, action.</li>
+            <li>A module is just a file of tools, and importing gives you access.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="7">
+          Next: Debugging <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 7: Debugging ── -->
+      <div class="lesson-block" id="lesson-7" data-lesson="7" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 7</span>
+          <h2 class="lesson-title">Debugging is Part of Programming</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Read errors, understand why code breaks, and fix it. This may be the most valuable skill of the whole week.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📖 The Truth</h3>
+          <p>Professional programmers spend <em>most</em> of their time debugging. Mistakes are normal, readable, and fixable. Every error message is a clue.</p>
+        </div>
+
+        <div class="lesson-task lesson-task-debug">
+          <h3>🐛 Bug 1: Broken Quotes</h3>
+          <p>Say what the code is <em>trying</em> to do. Guess why it fails. Fix it.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Fix me!</span></div>
+            <textarea class="code-editor" id="editor-7a" spellcheck="false">print("Hello)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="7a">▶ Run</button>
+          <div class="output-console" id="output-7a"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-debug">
+          <h3>🐛 Bug 2: Wrong Variable Name</h3>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Fix me!</span></div>
+            <textarea class="code-editor" id="editor-7b" spellcheck="false">robot_name = "Bolt"
+print(robt_name)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="7b">▶ Run</button>
+          <div class="output-console" id="output-7b"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-debug">
+          <h3>🐛 Bug 3: String + Number</h3>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Fix me!</span></div>
+            <textarea class="code-editor" id="editor-7c" spellcheck="false">battery = 90
+print("Battery: " + battery)</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="7c">▶ Run</button>
+          <div class="output-console" id="output-7c"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-debug">
+          <h3>🐛 Bug 4: Missing Parentheses</h3>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Fix me!</span></div>
+            <textarea class="code-editor" id="editor-7d" spellcheck="false">print "Hello"</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="7d">▶ Run</button>
+          <div class="output-console" id="output-7d"></div>
+        </div>
+
+        <div class="lesson-summary">
+          <h3>✅ What You Actually Learned</h3>
+          <ul>
+            <li>Mistakes are <strong>normal</strong>, readable, and fixable.</li>
+            <li>Every error message is a <strong>clue</strong>, not a punishment.</li>
+            <li>Spelling, quotes, parentheses, and types — the four most common bugs.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary lesson-next-btn" data-next="8">
+          Next: Final Project <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <!-- ── LESSON 8: Final Project ── -->
+      <div class="lesson-block" id="lesson-8" data-lesson="8" style="display:none;">
+        <div class="lesson-header">
+          <span class="lesson-number">Lesson 8</span>
+          <h2 class="lesson-title">Final Project: Robot Startup Routine</h2>
+          <p class="lesson-goal"><strong>Goal:</strong> Combine everything you've learned into one real program.</p>
+        </div>
+
+        <div class="lesson-teach">
+          <h3>📋 Requirements</h3>
+          <ul>
+            <li>Create at least <strong>4 variables</strong></li>
+            <li>Include one number and one boolean</li>
+            <li>Use at least <strong>3 <code>print()</code></strong> lines</li>
+            <li>Use at least <strong>2 robot actions</strong></li>
+            <li>Include <strong>one calculation</strong></li>
+            <li>Use <strong>f-strings</strong> for at least one message</li>
+          </ul>
+        </div>
+
+        <div class="lesson-task lesson-task-challenge">
+          <h3>🏁 Build It</h3>
+          <p>When the robot powers on, it should: identify itself, report battery, report whether it's ready, do a motion, and print a systems log.</p>
+          <div class="code-editor-block">
+            <div class="code-editor-header"><span>Python — Your Final Project</span></div>
+            <textarea class="code-editor code-editor-large" id="editor-8a" spellcheck="false">from robot import Dog
+
+# === Your variables ===
+robot_name = "Spark"
+battery = 85
+ready = True
+speed = 2.5
+
+# === Create the robot ===
+my_dog = Dog(robot_name)
+
+# === Startup routine ===
+my_dog.set_face("happy")
+my_dog.say(f"Hi! I'm {robot_name}!")
+
+# === Systems log ===
+runtime = battery / 12
+print(f"=== Systems Log ===")
+print(f"Robot: {robot_name}")
+print(f"Battery: {battery}%")
+print(f"Ready: {ready}")
+print(f"Est. Runtime: {runtime:.1f} hours")
+print(f"Speed: {speed} m/s")
+
+# === Motion ===
+my_dog.stand()
+my_dog.wave()</textarea>
+          </div>
+          <button class="btn btn-teal btn-run" data-editor="8a">▶ Run</button>
+          <div class="output-console" id="output-8a"></div>
+        </div>
+
+        <div class="lesson-task lesson-task-why">
+          <h3>🪞 Reflection</h3>
+          <ul class="why-questions">
+            <li>Which line of code are you most proud of?</li>
+            <li>Which line would break if you removed the quotes?</li>
+            <li>What variable can you change to get different behavior fast?</li>
+            <li>If the battery dropped to 15, what <em>should</em> the program do differently? (Hint: that's Week 2!)</li>
+          </ul>
+          <textarea class="reflection-input reflection-input-large" placeholder="Write your reflections here…"></textarea>
+        </div>
+
+        <div class="lesson-summary" style="background: linear-gradient(135deg, #E0FBF8, #FFF3CC); border: 2px solid var(--teal);">
+          <h3>🏆 Week 1 Complete!</h3>
+          <ul>
+            <li>You've learned <code>print()</code>, variables, types, f-strings, sequence, imports, and debugging.</li>
+            <li>You can <strong>predict</strong>, <strong>observe</strong>, <strong>explain</strong>, <strong>modify</strong>, and <strong>debug</strong> Python code.</li>
+            <li>That's actual programming. Most adults never get this far.</li>
+          </ul>
+        </div>
+
+        <button class="btn btn-primary btn-large lesson-next-btn btn-pulse" data-next="done">
+          Complete Week 1 <span class="btn-icon">🏁</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SCREEN 7: MISSION DEBRIEF — LEARNING JOURNEY ==================== -->
   <section id="screen-debrief" class="screen screen-scroll">
     <div class="debrief-scroll" id="debrief-scroll">
 
