@@ -20,8 +20,25 @@
   <!-- Particle canvas for celebrations -->
   <canvas id="particles-canvas" aria-hidden="true"></canvas>
 
+  <!-- ==================== SCREEN 0: INTRO ==================== -->
+  <section id="screen-intro" class="screen active">
+    <div class="screen-inner">
+      <div class="label">Hands-on Coding using Real Robots</div>
+      <h1 class="title">Meet <span class="highlight">Paulbot</span></h1>
+      
+      <div class="intro-media" style="margin: 20px 0; display: flex; flex-direction: column; gap: 16px; align-items: center;">
+        <img src="assets/images/botpic.png" alt="Paulbot the Robot" style="max-height: 220px; border-radius: var(--radius); box-shadow: var(--shadow-sm);">
+        <video id="intro-video" src="assets/images/dogbotMovie.mp4" autoplay loop muted playsinline style="max-height: 300px; max-width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-md);"></video>
+      </div>
+
+      <button class="btn btn-primary btn-pulse" id="btn-skip-intro">
+        Begin Mission <span class="btn-icon">→</span>
+      </button>
+    </div>
+  </section>
+
   <!-- ==================== SCREEN 1: LOADING ==================== -->
-  <section id="screen-loading" class="screen active">
+  <section id="screen-loading" class="screen">
     <div class="screen-inner">
       <div class="label">Mission Control</div>
 
@@ -219,39 +236,66 @@
     <div class="screen-inner">
       <div class="label">Connection Wizard</div>
       <h1 class="title">Let's <span class="highlight-teal">connect</span></h1>
-      <p class="subtitle">Follow these steps to link up with your robot.</p>
+      <p class="subtitle" id="connect-subtitle">Follow these steps to link up with your robot.</p>
 
-      <div class="connect-steps" id="connect-steps">
-        <div class="connect-step" id="step-1" data-step="1">
-          <div class="step-icon">🔌</div>
-          <div class="step-text">Connect Paulbot to your WiFi</div>
+      <div class="connect-wizard" id="connect-wizard" style="width: 100%; max-width: 500px; text-align: center;">
+        
+        <!-- Step 1: Switch ON -->
+        <div class="wizard-step active" id="wizard-step-1" style="display: flex; flex-direction: column; align-items: center; gap: 16px;">
+          <div class="step-icon" style="margin: 0 auto;">⚡</div>
+          <h3>Step 1: Power On</h3>
+          <p>Turn the switch on the neck of Paulbot to ON.</p>
+          <img src="assets/images/switchindicatorDogbot.png" alt="Switch location" style="max-width:100%; border-radius:8px; box-shadow:var(--shadow-sm);">
+          <button class="btn btn-teal" id="btn-wizard-next-1" style="margin-top:16px;">
+            Done <span class="btn-icon">→</span>
+          </button>
         </div>
-        <div class="connect-step" id="step-2" data-step="2">
-          <div class="step-icon">⚡</div>
-          <div class="step-text">Turn the switch on the neck of Paulbot to ON</div>
-        </div>
-        <div class="connect-step" id="step-3" data-step="3">
-          <div class="step-icon">📡</div>
-          <div class="step-text">Searching for Paulbot…</div>
-        </div>
-        <div class="connect-step" id="step-4" data-step="4">
-          <div class="step-icon">✅</div>
-          <div class="step-text">Connected!</div>
-        </div>
-      </div>
 
-      <div class="connect-progress">
-        <div class="connect-progress-bar" id="connect-progress-bar"></div>
-      </div>
+        <!-- Step 2: WiFi Connect -->
+        <div class="wizard-step" id="wizard-step-2" style="display: none; flex-direction: column; align-items: center; gap: 16px;">
+          <div class="step-icon" style="margin: 0 auto;">🔌</div>
+          <h3>Step 2: Connect to WiFi</h3>
+          <p>After turning on, the bot will display an IP address: <strong>192.168.4.1</strong> and emit its own Hotspot (also called Access Point).</p>
+          <p>Connect your computer to the bot's WiFi network by following these screenshots:</p>
+          
+          <div class="wizard-carousel" style="width: 100%; overflow-x: auto; display: flex; gap: 12px; padding-bottom: 12px; snap-type: x mandatory;">
+            <img src="assets/images/wificonn.PNG" alt="WiFi Step 1" style="max-height: 250px; scroll-snap-align: center; border-radius: 6px; box-shadow: var(--shadow-sm);">
+            <img src="assets/images/wifipage.PNG" alt="WiFi Step 2" style="max-height: 250px; scroll-snap-align: center; border-radius: 6px; box-shadow: var(--shadow-sm);">
+            <img src="assets/images/addwifigui.PNG" alt="WiFi Step 3" style="max-height: 250px; scroll-snap-align: center; border-radius: 6px; box-shadow: var(--shadow-sm);">
+            <img src="assets/images/IP_address.png" alt="WiFi Step 4" style="max-height: 250px; scroll-snap-align: center; border-radius: 6px; box-shadow: var(--shadow-sm);">
+            <img src="assets/images/gui.PNG" alt="WiFi Step 5" style="max-height: 250px; scroll-snap-align: center; border-radius: 6px; box-shadow: var(--shadow-sm);">
+          </div>
+          <div style="font-size: 0.8rem; color: var(--gray-400);">Scroll horizontally to see all steps →</div>
+          
+          <button class="btn btn-teal" id="btn-wizard-next-2" style="margin-top:8px;">
+            Connected! <span class="btn-icon">→</span>
+          </button>
+        </div>
 
-      <button class="btn btn-teal" id="btn-connect" style="margin-top:8px;">
-        <span class="btn-icon">🔗</span> Begin Connection
-      </button>
+        <!-- Step 3: Browse to local -->
+        <div class="wizard-step" id="wizard-step-3" style="display: none; flex-direction: column; align-items: center; gap: 16px;">
+          <div class="step-icon" style="margin: 0 auto;">🌐</div>
+          <h3>Step 3: Open Control Panel</h3>
+          <p>We can't automatically search for the bot, so open a new browser tab and go to:</p>
+          <div class="url-box" style="background:var(--white); padding:16px 32px; border-radius:8px; font-family:monospace; font-size:1.4rem; font-weight:bold; color:var(--teal-dark); border:2px dashed var(--teal);">
+            dogbot1.local
+          </div>
+          <p>You should be able to control the bot.</p>
+          <button class="btn btn-teal" id="btn-wizard-next-3" style="margin-top:8px;">
+            Done! Congrats! <span class="btn-icon">🎉</span>
+          </button>
+        </div>
 
-      <div class="wave-success" id="connect-success">
-        <button class="btn btn-primary btn-pulse" id="btn-continue-connect">
-          Awesome! Let's go <span class="btn-icon">→</span>
-        </button>
+        <!-- Step 4: Done -->
+        <div class="wizard-step" id="wizard-step-4" style="display: none; flex-direction: column; align-items: center; gap: 16px;">
+          <div class="step-icon" style="margin: 0 auto; background:var(--teal-light); color:var(--teal-dark);">✅</div>
+          <h3>Awesome!</h3>
+          <p>Your robot is fully connected and ready to go.</p>
+          <button class="btn btn-primary btn-pulse" id="btn-continue-connect" style="margin-top:16px;">
+            Next Step <span class="btn-icon">→</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </section>

@@ -199,12 +199,28 @@
     spawnParticles(cx, cy, count);
   }
 
+  // ── SCREEN 0: Intro ──────────────────────────────
+  const introVideo = $('#intro-video');
+  if (introVideo) {
+    introVideo.playbackRate = 0.6; // Epic slow motion
+  }
+
+  const btnSkipIntro = $('#btn-skip-intro');
+  if (btnSkipIntro) {
+    btnSkipIntro.addEventListener('click', function () {
+      goTo('screen-loading');
+      setTimeout(initLoading, 200);
+    });
+  }
+
   // ── SCREEN 1: Loading ────────────────────────────
   async function initLoading() {
     await wait(2800);
     const wrapper = $('#start-btn-wrapper');
-    wrapper.style.opacity = '1';
-    wrapper.style.animation = 'fade-in 0.8s var(--ease) forwards';
+    if (wrapper) {
+      wrapper.style.opacity = '1';
+      wrapper.style.animation = 'fade-in 0.8s var(--ease) forwards';
+    }
   }
 
   $('#btn-start').addEventListener('click', function () {
@@ -218,52 +234,31 @@
   });
 
   // ── SCREEN 3: Connection Wizard ──────────────────
-  let connecting = false;
+  const btnWiz1 = $('#btn-wizard-next-1');
+  const btnWiz2 = $('#btn-wizard-next-2');
+  const btnWiz3 = $('#btn-wizard-next-3');
 
-  $('#btn-connect').addEventListener('click', async function () {
-    if (connecting) return;
-    connecting = true;
-    this.style.display = 'none';
+  if (btnWiz1) {
+    btnWiz1.addEventListener('click', () => {
+      $('#wizard-step-1').style.display = 'none';
+      $('#wizard-step-2').style.display = 'flex';
+    });
+  }
 
-    const steps = $$('.connect-step');
-    const progressBar = $('#connect-progress-bar');
+  if (btnWiz2) {
+    btnWiz2.addEventListener('click', () => {
+      $('#wizard-step-2').style.display = 'none';
+      $('#wizard-step-3').style.display = 'flex';
+    });
+  }
 
-    // Step 1: USB
-    steps[0].classList.add('active');
-    progressBar.style.width = '25%';
-    await wait(1200);
-    steps[0].classList.remove('active');
-    steps[0].classList.add('done');
-    steps[0].querySelector('.step-icon').textContent = '✅';
-
-    // Step 2: Power
-    steps[1].classList.add('active');
-    progressBar.style.width = '50%';
-    await wait(1200);
-    steps[1].classList.remove('active');
-    steps[1].classList.add('done');
-    steps[1].querySelector('.step-icon').textContent = '✅';
-
-    // Step 3: Searching
-    steps[2].classList.add('active');
-    progressBar.style.width = '75%';
-    await wait(2000);
-    steps[2].classList.remove('active');
-    steps[2].classList.add('done');
-    steps[2].querySelector('.step-icon').textContent = '✅';
-    steps[2].querySelector('.step-text').textContent = 'Robot found!';
-
-    // Step 4: Connected
-    steps[3].classList.add('active');
-    steps[3].classList.add('done');
-    progressBar.style.width = '100%';
-    await wait(600);
-
-    celebrateCenter(50);
-
-    await wait(600);
-    $('#connect-success').classList.add('show');
-  });
+  if (btnWiz3) {
+    btnWiz3.addEventListener('click', () => {
+      $('#wizard-step-3').style.display = 'none';
+      $('#wizard-step-4').style.display = 'flex';
+      celebrateCenter(50);
+    });
+  }
 
   $('#btn-continue-connect').addEventListener('click', function () {
     goTo('screen-wave');
@@ -733,18 +728,10 @@
     selectedFace = null;
 
     // Reset connection wizard
-    $$('.connect-step').forEach((s) => {
-      s.classList.remove('active', 'done');
+    $$('.wizard-step').forEach((s, i) => {
+      s.style.display = i === 0 ? 'flex' : 'none';
+      s.classList.toggle('active', i === 0);
     });
-    $('#step-1 .step-icon').textContent = '🔌';
-    $('#step-2 .step-icon').textContent = '⚡';
-    $('#step-3 .step-icon').textContent = '📡';
-    $('#step-3 .step-text').textContent = 'Searching for your robot…';
-    $('#step-4 .step-icon').textContent = '✅';
-    $('#connect-progress-bar').style.width = '0%';
-    $('#connect-success').classList.remove('show');
-    const connectBtn = $('#btn-connect');
-    connectBtn.style.display = '';
 
     // Reset wave
     const waveBtn = $('#btn-wave');
@@ -780,12 +767,15 @@
     // Reset completion ring
     $('#ring-fill').style.strokeDashoffset = '408';
 
-    goTo('screen-loading');
-    setTimeout(initLoading, 100);
+    goTo('screen-intro');
+    if (introVideo) {
+      introVideo.currentTime = 0;
+      introVideo.play();
+    }
   });
 
   // ── Init ─────────────────────────────────────────
   spawnFloatingDots();
-  initLoading();
+  // initLoading(); // Now called after Intro Screen
 })();
 
