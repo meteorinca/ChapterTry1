@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Cursor Spigot 💧</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100dvh;
+            overflow: hidden;
+            background: #1a1a2e;
+            cursor: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: none;
+            position: fixed;
+            font-family: system-ui, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .interaction-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            cursor: none;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            pointer-events: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.4px;
+            text-align: center;
+            transition: opacity 0.8s;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .hint.hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="c"></canvas>
+    <div class="interaction-layer" id="layer"></div>
+    <div class="hint" id="hint">🖱️ Hold click or touch to spray</div>
+
+    <script>
+        (function () {
+            // ─── CONFIG ───────────────────────────────
+            const CURSOR_SIZE = 32;
+            const PARTICLE_SCALE = 0.7;
+            const GRAVITY = 980;
+            const GROUND_BOUNCE = 0.35;
+            const WALL_BOUNCE = 0.5;
+            const FRICTION = 0.92;
+            const AIR_DRAG = 0.998;
+            const SPRAY_SPEED_MIN = 180;
+            const SPRAY_SPEED_MAX = 520;
+            const SPRAY_SPREAD = 0.9;
+            const SPAWN_RATE = 3;
+            const BURST_COUNT = 14;
+            const MAX_PARTICLES = 250;
+            const SETTLE_THRESHOLD = 25;
+            const FADE_TIME = 5;
+            // ───────────────────────────────────────────
+
+            const canvas = document.getElementById('c');
+            const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+            const layer = document.getElementById('layer');
+            const hint = document.getElementById('hint');
+
+            let W, H, groundY;
+            let spigotOn = false;
+            let mouseX, mouseY;
+            let mouseActive = false;
+            let particles = [];
+            let sprite, spriteSize;
+
+            function resize() {
+                W = canvas.width = innerWidth;
+                H = canvas.height = innerHeight;
+                groundY = H - 6;
+            }
+            resize();
+            addEventListener('resize', resize);
+            addEventListener('orientationchange', () => setTimeout(resize, 100));
+
+            // ─── Build sprite once ────────────────────
+            function buildSprite() {
+                const s = CURSOR_SIZE;
+                const off = document.createElement('canvas');
+                off.width = s;
+                off.height = s;
+                const t = off.getContext('2d');
+                const scale = s / 32;
+
+                t.save();
+                t.scale(scale, scale);
+
+                function rr(x, y, w, h, r) {
+                    t.beginPath();
+                    t.moveTo(x + r, y);
+                    t.lineTo(x + w - r, y);
+                    t.quadraticCurveTo(x + w, y, x + w, y + r);
+                    t.lineTo(x + w, y + h - r);
+                    t.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+                    t.lineTo(x + r, y + h);
+                    t.quadraticCurveTo(x, y + h, x, y + h - r);
+                    t.lineTo(x, y + r);
+                    t.quadraticCurveTo(x, y, x + r, y);
+                    t.closePath();
+                }
+
+                t.shadowColor = 'rgba(255, 220, 0, 0.9)';
+                t.shadowBlur = 6;
+
+                rr(10, 11, 16, 10, 3);
+                t.fillStyle = '#ffd51c';
+                t.fill();
+                t.lineWidth = 1.2;
+                t.strokeStyle = '#fff6a8';
+                t.stroke();
+
+                rr(5, 9, 14, 12, 3);
+                t.fillStyle = '#ffd51c';
+                t.fill();
+                t.stroke();
+
+                t.shadowBlur = 0;
+
+                rr(7, 11, 10, 7, 1.5);
+                t.fillStyle = '#151515';
+                t.fill();
+
+                t.beginPath();
+                t.arc(10, 14.5, 1, 0, Math.PI * 2);
+                t.arc(14, 14.5, 1, 0, Math.PI * 2);
+                t.fillStyle = '#8eeeff';
+                t.fill();
+
+                t.beginPath();
+                t.arc(12, 9.7, 0.7, 0, Math.PI * 2);
+                t.fillStyle = '#111';
+                t.fill();
+
+                t.lineWidth = 3.2;
+                t.lineCap = 'round';
+                t.strokeStyle = '#f5bf00';
+                t.beginPath();
+                t.moveTo(8, 20);
+                t.lineTo(7, 27);
+                t.moveTo(15, 21);
+                t.lineTo(15, 28);
+                t.moveTo(22, 20);
+                t.lineTo(23, 27);
+                t.moveTo(26, 19);
+                t.lineTo(28, 25);
+                t.stroke();
+
+                t.lineWidth = 3.5;
+                t.strokeStyle = '#111';
+                t.beginPath();
+                t.moveTo(6.5, 27);
+                t.lineTo(8.5, 27);
+                t.moveTo(14, 28);
+                t.lineTo(16, 28);
+                t.moveTo(22, 27);
+                t.lineTo(24, 27);
+                t.moveTo(27, 25);
+                t.lineTo(29, 25);
+                t.stroke();
+
+                t.beginPath();
+                t.arc(19, 20, 1, 0, Math.PI * 2);
+                t.arc(25, 19, 1, 0, Math.PI * 2);
+                t.fillStyle = '#d99f00';
+                t.fill();
+
+                t.beginPath();
+                t.moveTo(11, 12);
+                t.lineTo(24, 12);
+                t.strokeStyle = 'rgba(255,255,255,0.35)';
+                t.lineWidth = 1;
+                t.stroke();
+
+                t.restore();
+                sprite = off;
+                spriteSize = s;
+            }
+            buildSprite();
+
+            // ─── Particle pool (pre-allocation) ───────
+            function createParticle(x, y, vx, vy, sc) {
+                return {
+                    x,
+                    y,
+                    vx,
+                    vy,
+                    rot: Math.random() * 6.283,
+                    av: (Math.random() - 0.5) * 10,
+                    sc: sc || PARTICLE_SCALE + Math.random() * 0.15,
+                    settled: false,
+                    time: 0,
+                    op: 1
+                };
+            }
+
+            function spray(count) {
+                const len = particles.length;
+                const max = MAX_PARTICLES;
+                for (let i = 0; i < count && len + i < max; i++) {
+                    const a = -1.57 + (Math.random() - 0.5) * SPRAY_SPREAD * 2;
+                    const spd = SPRAY_SPEED_MIN + Math.random() * (SPRAY_SPEED_MAX - SPRAY_SPEED_MIN);
+                    particles.push(createParticle(mouseX, mouseY, Math.cos(a) * spd, Math.sin(a) * spd));
+                }
+            }
+
+            function spraySteady() {
+                if (particles.length >= MAX_PARTICLES) return;
+                const n = SPAWN_RATE + (Math.random() < 0.6 ? 1 : 0);
+                for (let i = 0; i < n && particles.length < MAX_PARTICLES; i++) {
+                    const a = -1.57 + (Math.random() - 0.5) * SPRAY_SPREAD * 2;
+                    const spd = SPRAY_SPEED_MIN * 0.75 + Math.random() * (SPRAY_SPEED_MAX - SPRAY_SPEED_MIN * 0.75);
+                    particles.push(createParticle(mouseX, mouseY, Math.cos(a) * spd, Math.sin(a) * spd));
+                }
+            }
+
+            // ─── Events ───────────────────────────────
+            function pos(e) {
+                const t = e.touches;
+                if (t && t.length) return { x: t[0].clientX, y: t[0].clientY };
+                if (e.changedTouches && e.changedTouches.length) return {
+                    x: e.changedTouches[0].clientX, y: e
+                        .changedTouches[0].clientY
+                };
+                return { x: e.clientX, y: e.clientY };
+            }
+
+            layer.addEventListener('pointerdown', e => {
+                e.preventDefault();
+                const p = pos(e);
+                mouseX = p.x;
+                mouseY = p.y;
+                mouseActive = true;
+                spigotOn = true;
+                spray(BURST_COUNT);
+                hint.classList.add('hidden');
+            });
+
+            layer.addEventListener('pointermove', e => {
+                e.preventDefault();
+                const p = pos(e);
+                mouseX = p.x;
+                mouseY = p.y;
+                mouseActive = true;
+            });
+
+            layer.addEventListener('pointerup', e => {
+                e.preventDefault();
+                spigotOn = false;
+                spray(3);
+            });
+
+            layer.addEventListener('pointerleave', () => {
+                mouseActive = false;
+                spigotOn = false;
+            });
+
+            layer.addEventListener('pointerenter', e => {
+                const p = pos(e);
+                if (p) {
+                    mouseX = p.x;
+                    mouseY = p.y;
+                    mouseActive = true;
+                }
+            });
+
+            layer.addEventListener('pointercancel', () => {
+                spigotOn = false;
+            });
+
+            // ─── Physics (optimized tight loop) ───────
+            function update(dt) {
+                const d = Math.min(dt, 0.1);
+                const g = GRAVITY * d;
+                const ad = AIR_DRAG;
+                const hs = spriteSize * 0.5;
+
+                if (spigotOn && mouseActive) spraySteady();
+
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+
+                    if (p.settled) {
+                        p.time += d;
+                        p.op = 1 - p.time / FADE_TIME;
+                        p.y += d * 3;
+                        p.rot += p.av * 0.05 * d;
+                        if (p.time >= FADE_TIME || p.op <= 0.02) {
+                            particles[i] = particles[particles.length - 1];
+                            particles.pop();
+                        }
+                        continue;
+                    }
+
+                    p.vy += g;
+                    p.vx *= ad;
+                    p.vy *= ad;
+                    p.x += p.vx * d;
+                    p.y += p.vy * d;
+                    p.rot += p.av * d;
+
+                    const h = hs * p.sc;
+                    const gy = groundY - h;
+
+                    if (p.y >= gy) {
+                        p.y = gy;
+                        if (Math.abs(p.vy) > SETTLE_THRESHOLD) {
+                            p.vy = -Math.abs(p.vy) * GROUND_BOUNCE;
+                            p.vx *= FRICTION;
+                            p.av *= 0.6;
+                            p.vx += (Math.random() - 0.5) * 35;
+                        } else {
+                            p.settled = true;
+                            p.time = 0;
+                            p.vy = 0;
+                            p.vx *= 0.15;
+                            p.av *= 0.08;
+                        }
+                    }
+
+                    if (p.x - h < 0) {
+                        p.x = h;
+                        p.vx = Math.abs(p.vx) * WALL_BOUNCE;
+                    }
+                    if (p.x + h > W) {
+                        p.x = W - h;
+                        p.vx = -Math.abs(p.vx) * WALL_BOUNCE;
+                    }
+                    if (p.y - h < 0) {
+                        p.y = h;
+                        p.vy = Math.abs(p.vy) * WALL_BOUNCE * 0.7;
+                    }
+                }
+
+                // Drain excess
+                while (particles.length > MAX_PARTICLES) {
+                    let idx = -1,
+                        oldest = -1;
+                    for (let i = 0; i < particles.length; i++) {
+                        if (particles[i].settled && particles[i].time > oldest) {
+                            oldest = particles[i].time;
+                            idx = i;
+                        }
+                    }
+                    if (idx >= 0) {
+                        particles[idx] = particles[particles.length - 1];
+                        particles.pop();
+                    } else {
+                        particles.pop();
+                    }
+                }
+            }
+
+            // ─── Render (minimal draw calls) ──────────
+            function render() {
+                ctx.clearRect(0, 0, W, H);
+
+                // Ground glow
+                const grad = ctx.createLinearGradient(0, groundY - 15, 0, groundY + 15);
+                grad.addColorStop(0, 'rgba(255,255,255,0)');
+                grad.addColorStop(0.5, 'rgba(255,255,255,0.04)');
+                grad.addColorStop(1, 'rgba(255,255,255,0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, groundY - 15, W, 30);
+
+                // Particles (single loop, no per-particle save/restore overhead for settled)
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    const sz = spriteSize * p.sc;
+                    const hsz = sz * 0.5;
+
+                    ctx.save();
+                    ctx.globalAlpha = p.op;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot);
+                    ctx.drawImage(sprite, -hsz, -hsz, sz, sz);
+                    ctx.restore();
+                }
+
+                // Main cursor
+                if (mouseActive) {
+                    const pulse = spigotOn ? 1 + Math.sin(performance.now() * 0.008) * 0.05 : 1;
+                    const sz = spriteSize * pulse;
+                    const hsz = sz * 0.5;
+                    ctx.save();
+                    ctx.translate(mouseX, mouseY);
+                    ctx.shadowColor = spigotOn ? 'rgba(255,200,140,0.7)' : 'rgba(255,255,255,0.25)';
+                    ctx.shadowBlur = spigotOn ? 16 : 6;
+                    ctx.drawImage(sprite, -hsz, -hsz, sz, sz);
+                    ctx.restore();
+                }
+            }
+
+            // ─── Loop ─────────────────────────────────
+            let last = performance.now();
+
+            function loop(now) {
+                const dt = (now - last) / 1000;
+                last = now;
+                update(dt);
+                render();
+                requestAnimationFrame(loop);
+            }
+
+            mouseX = W / 2;
+            mouseY = H / 2;
+            requestAnimationFrame(loop);
+
+            addEventListener('blur', () => { spigotOn = false; });
+        })();
+    </script>
+</body>
+
+</html>
