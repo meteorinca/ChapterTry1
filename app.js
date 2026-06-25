@@ -812,19 +812,28 @@
 
   // ── Cursor Spigot Logic ─────────────────────────
   const btnToggleSpigot = document.getElementById('btn-toggle-spigot');
-  const spigotLayer = document.getElementById('spigot-layer');
   const spigotCanvas = document.getElementById('spigot-canvas');
-  let spigotEnabled = false;
+  let spigotEnabled = true; // ON by default
 
-  if (btnToggleSpigot && spigotLayer) {
-    btnToggleSpigot.addEventListener('click', () => {
+  if (btnToggleSpigot) {
+    // Set initial state
+    document.body.style.cursor = 'none';
+    btnToggleSpigot.innerHTML = '💧 Spigot: ON';
+    btnToggleSpigot.style.background = 'var(--teal-light)';
+
+    btnToggleSpigot.addEventListener('click', (e) => {
+      // Prevent the spigot toggle itself from spraying immediately on this click if we want,
+      // but it's fine since we handle pointerdown globally.
       spigotEnabled = !spigotEnabled;
       if (spigotEnabled) {
-        spigotLayer.style.display = 'block';
+        document.body.style.cursor = 'none';
+        // Add a global class to ensure all elements hide their cursor if needed
+        document.documentElement.classList.add('hide-cursor');
         btnToggleSpigot.innerHTML = '💧 Spigot: ON';
         btnToggleSpigot.style.background = 'var(--teal-light)';
       } else {
-        spigotLayer.style.display = 'none';
+        document.body.style.cursor = '';
+        document.documentElement.classList.remove('hide-cursor');
         btnToggleSpigot.innerHTML = '💧 Spigot: OFF';
         btnToggleSpigot.style.background = 'var(--bg)';
         // Clear canvas instantly when disabled
@@ -832,6 +841,16 @@
         ctx.clearRect(0, 0, spigotCanvas.width, spigotCanvas.height);
       }
     });
+
+    // Also add the style to hide all cursors when enabled
+    const style = document.createElement('style');
+    style.textContent = `
+      html.hide-cursor, html.hide-cursor * {
+        cursor: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+    document.documentElement.classList.add('hide-cursor');
 
     (function () {
       const CURSOR_SIZE = 32;
@@ -852,7 +871,6 @@
 
       const canvas = spigotCanvas;
       const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
-      const layer = spigotLayer;
 
       let W, H, groundY;
       let spigotOn = false;
@@ -1012,8 +1030,8 @@
           return { x: e.clientX, y: e.clientY };
       }
 
-      layer.addEventListener('pointerdown', e => {
-          e.preventDefault();
+      window.addEventListener('pointerdown', e => {
+          // DO NOT preventDefault so buttons can still be clicked!
           const p = pos(e);
           mouseX = p.x;
           mouseY = p.y;
@@ -1022,31 +1040,29 @@
           spray(BURST_COUNT);
       });
 
-      layer.addEventListener('pointermove', e => {
-          e.preventDefault();
+      window.addEventListener('pointermove', e => {
           const p = pos(e);
           mouseX = p.x;
           mouseY = p.y;
           mouseActive = true;
       });
 
-      layer.addEventListener('pointerup', e => {
-          e.preventDefault();
+      window.addEventListener('pointerup', e => {
           spigotOn = false;
           spray(3);
       });
 
-      layer.addEventListener('pointerleave', () => {
+      window.addEventListener('pointerleave', () => {
           mouseActive = false;
           spigotOn = false;
       });
 
-      layer.addEventListener('pointerenter', e => {
+      window.addEventListener('pointerenter', e => {
           const p = pos(e);
           if (p) { mouseX = p.x; mouseY = p.y; mouseActive = true; }
       });
 
-      layer.addEventListener('pointercancel', () => {
+      window.addEventListener('pointercancel', () => {
           spigotOn = false;
       });
 
