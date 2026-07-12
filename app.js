@@ -328,52 +328,54 @@
   const faceCards = $$('.face-card');
   const sendBtn = $('#btn-send-face');
 
-  faceCards.forEach((card) => {
-    card.addEventListener('click', function () {
-      faceCards.forEach((c) => c.classList.remove('selected'));
-      this.classList.add('selected');
-      selectedFace = this.dataset.face;
-      sendBtn.disabled = false;
+  if (faceCards.length > 0 && sendBtn) {
+    faceCards.forEach((card) => {
+      card.addEventListener('click', function () {
+        faceCards.forEach((c) => c.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedFace = this.dataset.face;
+        sendBtn.disabled = false;
 
-      this.style.transform = 'translateY(-4px) scale(1.05)';
-      setTimeout(() => {
-        this.style.transform = 'translateY(-4px) scale(1)';
-      }, 200);
+        this.style.transform = 'translateY(-4px) scale(1.05)';
+        setTimeout(() => {
+          this.style.transform = 'translateY(-4px) scale(1)';
+        }, 200);
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
     });
 
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        card.click();
-      }
+    sendBtn.addEventListener('click', async function () {
+      if (!selectedFace) return;
+      this.disabled = true;
+      this.innerHTML = '<span class="btn-icon">📡</span> Sending…';
+
+      const progress = $('#send-progress');
+      const bar = $('#send-progress-bar');
+      progress.classList.add('show');
+
+      await wait(200);
+      bar.style.width = '30%';
+      await wait(600);
+      bar.style.width = '70%';
+      await wait(800);
+      bar.style.width = '100%';
+      await wait(500);
+
+      progress.classList.remove('show');
+      this.innerHTML = '<span class="btn-icon">✅</span> Sent!';
+      this.style.background = 'linear-gradient(135deg, #22D1C3 0%, #19A89D 100%)';
+
+      celebrateCenter(60);
+      await wait(600);
+      $('#face-success').classList.add('show');
     });
-  });
-
-  sendBtn.addEventListener('click', async function () {
-    if (!selectedFace) return;
-    this.disabled = true;
-    this.innerHTML = '<span class="btn-icon">📡</span> Sending…';
-
-    const progress = $('#send-progress');
-    const bar = $('#send-progress-bar');
-    progress.classList.add('show');
-
-    await wait(200);
-    bar.style.width = '30%';
-    await wait(600);
-    bar.style.width = '70%';
-    await wait(800);
-    bar.style.width = '100%';
-    await wait(500);
-
-    progress.classList.remove('show');
-    this.innerHTML = '<span class="btn-icon">✅</span> Sent!';
-    this.style.background = 'linear-gradient(135deg, #22D1C3 0%, #19A89D 100%)';
-
-    celebrateCenter(60);
-    await wait(600);
-    $('#face-success').classList.add('show');
-  });
+  }
 
   // Face picker now goes to lessons
   $('#btn-continue-faces').addEventListener('click', function () {
@@ -774,12 +776,16 @@
     waveRobot.classList.remove('robot-waving', 'robot-happy');
 
     // Reset faces
-    faceCards.forEach((c) => c.classList.remove('selected'));
-    sendBtn.disabled = true;
-    sendBtn.innerHTML = '<span class="btn-icon">📤</span> Send to Robot';
-    sendBtn.style.background = '';
-    $('#send-progress-bar').style.width = '0%';
-    $('#face-success').classList.remove('show');
+    if (faceCards.length > 0) faceCards.forEach((c) => c.classList.remove('selected'));
+    if (sendBtn) {
+      sendBtn.disabled = true;
+      sendBtn.innerHTML = '<span class="btn-icon">📤</span> Send to Robot';
+      sendBtn.style.background = '';
+    }
+    const progressBar = $('#send-progress-bar');
+    if (progressBar) progressBar.style.width = '0%';
+    const faceSuccess = $('#face-success');
+    if (faceSuccess) faceSuccess.classList.remove('show');
 
     // Reset lessons
     $$('.lesson-block').forEach((block, i) => {
@@ -1031,6 +1037,7 @@
       }
 
       window.addEventListener('pointerdown', e => {
+          if (!spigotEnabled) return;
           // DO NOT preventDefault so buttons can still be clicked!
           const p = pos(e);
           mouseX = p.x;

@@ -329,6 +329,11 @@
         </div>
       </div>
 
+      <div class="screenshots-area" style="display: flex; gap: 16px; margin: 20px 0; justify-content: center; width: 100%; max-width: 500px;">
+        <div style="flex: 1; height: 160px; background: var(--gray-200); border-radius: 8px; border: 2px dashed var(--gray-400); display: flex; align-items: center; justify-content: center; color: var(--gray-600); font-size: 0.9rem;">Screenshot 1 Area</div>
+        <div style="flex: 1; height: 160px; background: var(--gray-200); border-radius: 8px; border: 2px dashed var(--gray-400); display: flex; align-items: center; justify-content: center; color: var(--gray-600); font-size: 0.9rem;">Screenshot 2 Area</div>
+      </div>
+
       <button class="wave-btn" id="btn-wave">
         <span class="btn-icon">🐾</span>
         Wave
@@ -343,76 +348,16 @@
     </div>
   </section>
 
-  <!-- ==================== SCREEN 5: FACE PICKER ==================== -->
+  <!-- ==================== SCREEN 5: EMOTIONS ==================== -->
   <section id="screen-faces" class="screen">
     <div class="screen-inner">
       <div class="label">Customization</div>
-      <h1 class="title">Pick a <span class="highlight-teal">face</span></h1>
-      <p class="subtitle">Choose a personality for your robot's screen. You can always change it later.</p>
+      <h1 class="title">Change <span class="highlight-teal">Emotions</span></h1>
+      <p class="subtitle">Press the button on top of Paulbot to change his emotional states (and make funny sounds). He can get grumpy, tired, sad, content.</p>
 
-      <div class="face-grid" id="face-grid">
-        <!-- Happy -->
-        <div class="face-card face-happy" data-face="happy" tabindex="0" role="button" aria-label="Happy face">
-          <div class="face-eyes">
-            <div class="pixel-eye"></div>
-            <div class="pixel-eye"></div>
-          </div>
-          <div class="face-mouth"></div>
-          <span class="face-label">Happy</span>
-        </div>
-        <!-- Curious -->
-        <div class="face-card face-curious" data-face="curious" tabindex="0" role="button" aria-label="Curious face">
-          <div class="face-eyes">
-            <div class="pixel-eye"></div>
-            <div class="pixel-eye"></div>
-          </div>
-          <div class="face-mouth"></div>
-          <span class="face-label">Curious</span>
-        </div>
-        <!-- Sleepy -->
-        <div class="face-card face-sleepy" data-face="sleepy" tabindex="0" role="button" aria-label="Sleepy face">
-          <div class="face-eyes">
-            <div class="pixel-eye"></div>
-            <div class="pixel-eye"></div>
-          </div>
-          <div class="face-mouth"></div>
-          <span class="face-label">Sleepy</span>
-        </div>
-        <!-- Excited -->
-        <div class="face-card face-excited" data-face="excited" tabindex="0" role="button" aria-label="Excited face">
-          <div class="face-eyes">
-            <div class="pixel-eye"></div>
-            <div class="pixel-eye"></div>
-          </div>
-          <div class="face-mouth"></div>
-          <span class="face-label">Excited</span>
-        </div>
-        <!-- Silly -->
-        <div class="face-card face-silly" data-face="silly" tabindex="0" role="button" aria-label="Silly face">
-          <div class="face-eyes">
-            <div class="pixel-eye"></div>
-            <div class="pixel-eye"></div>
-          </div>
-          <div class="face-mouth"></div>
-          <span class="face-label">Silly</span>
-        </div>
-      </div>
-
-      <button class="btn btn-teal" id="btn-send-face" disabled>
-        <span class="btn-icon">📤</span> Send to Robot
+      <button class="btn btn-primary btn-pulse" id="btn-continue-faces" style="margin-top: 30px;">
+        Start Learning Python <span class="btn-icon">🐍</span>
       </button>
-
-      <div class="send-progress" id="send-progress">
-        <div class="send-progress-bar" id="send-progress-bar"></div>
-      </div>
-
-      <div class="wave-success" id="face-success">
-        <p class="subtitle"><strong>You just changed how it looks!</strong><br>That face is now on your robot's screen.
-          🤖✨</p>
-        <button class="btn btn-primary btn-pulse" id="btn-continue-faces">
-          Start Learning Python <span class="btn-icon">🐍</span>
-        </button>
-      </div>
     </div>
   </section>
 
@@ -1499,6 +1444,10 @@ my_dog.say(response)</code></pre>
       </button>
     </div>
   </section>
+
+  <footer style="position: fixed; bottom: 10px; left: 0; width: 100%; text-align: center; color: var(--gray-400); font-size: 0.75rem; z-index: 1000; pointer-events: none; opacity: 0.8;">
+    To learn more, visit <a href="https://mypaulbot.com" style="color: var(--teal); pointer-events: auto; text-decoration: none; font-weight: 600;">mypaulbot.com</a> | &copy; All rights reserved electrobot, LLC
+  </footer>
 
   <script src="app.js"></script>
 </body>
