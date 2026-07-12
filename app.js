@@ -1048,6 +1048,7 @@
       });
 
       window.addEventListener('pointermove', e => {
+          if (!spigotEnabled) return;
           const p = pos(e);
           mouseX = p.x;
           mouseY = p.y;
@@ -1056,7 +1057,7 @@
 
       window.addEventListener('pointerup', e => {
           spigotOn = false;
-          spray(3);
+          if (spigotEnabled) spray(3);
       });
 
       window.addEventListener('pointerleave', () => {
@@ -1065,6 +1066,7 @@
       });
 
       window.addEventListener('pointerenter', e => {
+          if (!spigotEnabled) return;
           const p = pos(e);
           if (p) { mouseX = p.x; mouseY = p.y; mouseActive = true; }
       });
