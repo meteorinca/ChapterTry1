@@ -819,13 +819,13 @@
   // ── Cursor Spigot Logic ─────────────────────────
   const btnToggleSpigot = document.getElementById('btn-toggle-spigot');
   const spigotCanvas = document.getElementById('spigot-canvas');
-  let spigotEnabled = true; // ON by default
+  let spigotEnabled = false; // OFF by default
 
   if (btnToggleSpigot) {
     // Set initial state
-    document.body.style.cursor = 'none';
-    btnToggleSpigot.innerHTML = '💧 Spigot: ON';
-    btnToggleSpigot.style.background = 'var(--teal-light)';
+    document.body.style.cursor = '';
+    btnToggleSpigot.innerHTML = '💧 Spigot: OFF';
+    btnToggleSpigot.style.background = 'var(--bg)';
 
     btnToggleSpigot.addEventListener('click', (e) => {
       // Prevent the spigot toggle itself from spraying immediately on this click if we want,
@@ -856,7 +856,7 @@
       }
     `;
     document.head.appendChild(style);
-    document.documentElement.classList.add('hide-cursor');
+    // Do not add 'hide-cursor' by default since it is OFF
 
     (function () {
       const CURSOR_SIZE = 32;
