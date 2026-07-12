@@ -17,7 +17,154 @@
 
 <body>
 
-  <!-- Cursor Spigot UI -->
+  <!-- ==================== AGE GATE / DIVERT MODAL ==================== -->
+  <style>
+    #age-gate-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      flex-direction: row;
+      font-family: 'Outfit', sans-serif;
+    }
+    .age-gate-logo {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100000;
+      background: #D82121; /* Red like Lego or maybe brand color */
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 3px solid var(--gold);
+    }
+    .age-gate-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+    .age-gate-left {
+      background: #0055d4;
+      color: var(--white);
+    }
+    .age-gate-right {
+      background: var(--gold);
+      color: var(--dark);
+    }
+    .age-gate-icons {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+      align-items: center;
+    }
+    .age-gate-icon {
+      background: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .age-gate-icon.small { width: 64px; height: 64px; font-size: 1.8rem; }
+    .age-gate-icon.large { width: 84px; height: 84px; font-size: 2.5rem; }
+    
+    .age-gate-btn {
+      background: var(--white);
+      border: none;
+      padding: 16px 48px;
+      border-radius: 40px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .age-gate-left .age-gate-btn { color: #0055d4; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    .age-gate-right .age-gate-btn { color: var(--dark); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .age-gate-btn:hover { transform: scale(1.05); }
+
+    .age-gate-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.9);
+      color: var(--white);
+      text-align: center;
+      padding: 16px;
+      font-size: 0.85rem;
+      z-index: 100000;
+    }
+    .age-gate-footer a { color: var(--white); text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      #age-gate-modal { flex-direction: column; }
+      .age-gate-logo { top: 12px; font-size: 1.4rem; padding: 8px 16px; }
+      .age-gate-panel { padding: 40px 20px; }
+      .age-gate-footer { position: relative; }
+      .age-gate-icons { margin-bottom: 16px; }
+      .age-gate-icon.small { width: 48px; height: 48px; font-size: 1.4rem; }
+      .age-gate-icon.large { width: 64px; height: 64px; font-size: 2rem; }
+    }
+  </style>
+
+  <div id="age-gate-modal">
+    <div class="age-gate-logo">PAULBOT</div>
+    
+    <!-- Left: Adult / Shop Site -->
+    <div class="age-gate-panel age-gate-left">
+      <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 32px;">mypaulbot.com</h2>
+      
+      <div class="age-gate-icons">
+        <div class="age-gate-icon small">🛍️</div>
+        <div class="age-gate-icon large">⚙️</div>
+        <div class="age-gate-icon small">💬</div>
+      </div>
+      
+      <p style="font-size: 1.25rem; font-weight: 500; margin-bottom: 8px;">You are about to enter mypaulbot.com.</p>
+      <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 32px;">You can shop, get support & more.</p>
+      
+      <a href="https://mypaulbot.com" class="age-gate-btn">Continue</a>
+    </div>
+
+    <!-- Right: Kids / Play Zone -->
+    <div class="age-gate-panel age-gate-right">
+      <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 32px;">THE PLAY ZONE</h2>
+      
+      <img src="assets/images/botpic.png" alt="Paulbot Kids" style="max-height: 180px; margin-bottom: 24px; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.15));">
+      
+      <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 32px;">Play games, code, and control your robot!</p>
+      
+      <button id="btn-close-age-gate" class="age-gate-btn">START PLAYING</button>
+    </div>
+
+    <!-- Cookie / Footer Info -->
+    <div class="age-gate-footer">
+      We want to let you know that we are placing cookies on your device that remember your choices on mypaulbot.com. 
+      For more info view our <a href="#">Cookie Policy</a> and our <a href="#">Privacy Policy</a>.
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('btn-close-age-gate').addEventListener('click', function() {
+      const modal = document.getElementById('age-gate-modal');
+      modal.style.transition = 'opacity 0.4s ease';
+      modal.style.opacity = '0';
+      setTimeout(() => modal.remove(), 400);
+    });
+  </script>
+  <!-- ==================== END AGE GATE ==================== -->  <!-- Cursor Spigot UI -->
   <canvas id="spigot-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 100;"></canvas>
   
   <!-- Spigot Toggle -->
